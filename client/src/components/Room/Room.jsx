@@ -16,7 +16,7 @@ const Video = (props) => {
         <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
             <video playsInline autoPlay ref={ref} />
             <div className="card-body">
-                <h5 className="card-title">{props.peer.peerID}</h5>
+                <h5 className="card-title">{props.id}</h5>
                 <a href="/" className="btn btn-primary">Go somewhere</a>
             </div>
         </div>
@@ -25,12 +25,18 @@ const Video = (props) => {
 
 const Room = (props) => {
     const [peers, setPeers] = useState([]);
+    const [myID, setMyID] = useState(0);
     const userVideo = useRef();
     const peersRef = useRef([]);
     const history = useHistory();
 
     useEffect(() => {
         const socket = io("http://localhost:5000");
+
+        socket.on("myID", (id) => {
+            setMyID(id);
+        });
+
         const roomID = props.match.params.roomId;
         const createPeer = (receiver, sender, stream) => {
             const peer = new Peer({
@@ -85,7 +91,21 @@ const Room = (props) => {
                     peer,
                 };
                 peersRef.current.push(x);
-                setPeers(users => [...users, x]);
+                setPeers(users => {
+                    return [...users, x]
+                });
+            });
+
+            socket.on("user-left", (id) => {
+                const item = peersRef.current.filter(p => p.peerID === id);
+                peersRef.current = peersRef.current.filter(p => p.peerID !== id);
+                setPeers(users => {
+                    let x = [...users];
+                    console.log(x);
+                    x = x.filter(p => p.peerID !== id);
+                    return x;
+                });
+                item[0].peer.destroy();
             });
 
             socket.on("receiving returned signal", (data) => {
@@ -101,13 +121,13 @@ const Room = (props) => {
                 <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
                     <video className="card-img-top" muted ref={userVideo} autoPlay playsInline />
                     <div className="card-body">
-                        <h5 className="card-title">Name</h5>
+                        <h5 className="card-title">Me - {myID}</h5>
                         <a href="/" className="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
                 {peers.map((peer, index) => {
                     return (
-                        <Video key={index} peer={peer.peer} />
+                        <Video key={index} peer={peer.peer} id={peer.peerID}/>
                     );
                 })}  
             </div>

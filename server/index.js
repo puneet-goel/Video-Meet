@@ -25,6 +25,8 @@ const socketToRoom = {};
 
 io.on('connection', socket => {
 
+    socket.emit("myID", socket.id);
+    
     socket.on("join room", roomID => {
         if (users.hasOwnProperty(roomID)) {
             const length = users[roomID].length;
@@ -44,12 +46,14 @@ io.on('connection', socket => {
 
         socket.on('disconnect', () => {
             const roomID = socketToRoom[socket.id];
-    
             delete socketToRoom[socket.id]; 
+
             let room = users[roomID].filter(id => id !== socket.id);
             users[roomID] = room;
             if (room.length === 0) {
                 delete users[roomID];
+            }else {
+                socket.to(roomID).emit("user-left",socket.id);
             }
         });
 
