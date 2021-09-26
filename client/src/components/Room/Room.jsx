@@ -24,13 +24,12 @@ const Video = (props) => {
 
 const Room = (props) => {
     const [peers, setPeers] = useState([]);
-    const socket = io("http://localhost:5000");
     const userVideo = useRef();
     const peersRef = useRef([]);
-    const roomID = props.match.params.roomId;
 
     useEffect(() => {
-        
+        const socket = io("http://localhost:5000");
+        const roomID = props.match.params.roomId;
         const createPeer = (receiver, sender, stream) => {
             const peer = new Peer({
                 initiator: true,
@@ -60,26 +59,27 @@ const Room = (props) => {
             userVideo.current.srcObject = stream;
             socket.emit("join room", roomID);
             socket.on("allExceptMe", users => {
-                const peers = [];
+                let peers = [];
                 users.forEach( (receiver) => {
                     const peer = createPeer(receiver, socket.id, stream);
-                    peersRef.current.push({
+                    let x = {
                         peerID: receiver,
                         peer,
-                    })
-                    peers.push(peer);
+                    };
+                    peersRef.current.push(x);
+                    peers.push(x);
                 });
                 setPeers(peers);
             });
 
             socket.on("user-joined", (data) => {
                 const peer = addPeer(data.signal, data.sender, stream);
-                peersRef.current.push({
+                let x = {
                     peerID: data.sender,
                     peer,
-                });
-                setPeers(users => [...users, peer]);
-                
+                };
+                peersRef.current.push(x);
+                setPeers(users => [...users, x]);
             });
 
             socket.on("receiving returned signal", (data) => {
@@ -87,7 +87,7 @@ const Room = (props) => {
                 item.peer.signal(data.signal);
             });
         })
-    }, [roomID]);
+    }, []);
     
     return (
         <div className="container mt-5">
@@ -101,7 +101,7 @@ const Room = (props) => {
                 </div>
                 {peers.map((peer, index) => {
                     return (
-                        <Video key={index} peer={peer} />
+                        <Video key={index} peer={peer.peer} />
                     );
                 })}  
             </div>
