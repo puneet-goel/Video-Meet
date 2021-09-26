@@ -26,9 +26,9 @@ const socketToRoom = {};
 io.on('connection', socket => {
 
     socket.on("join room", roomID => {
-        if (users[roomID]) {
+        if (users.hasOwnProperty(roomID)) {
             const length = users[roomID].length;
-            if (length === 4) {
+            if (length === 3) {
                 socket.emit("room full");
                 return;
             }
@@ -36,6 +36,7 @@ io.on('connection', socket => {
         } else {
             users[roomID] = [socket.id];
         }
+        socket.join(roomID);
         socketToRoom[socket.id] = roomID;
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
@@ -47,7 +48,6 @@ io.on('connection', socket => {
             delete socketToRoom[socket.id]; 
             let room = users[roomID].filter(id => id !== socket.id);
             users[roomID] = room;
-
             if (room.length === 0) {
                 delete users[roomID];
             }

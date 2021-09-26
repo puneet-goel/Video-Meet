@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 
@@ -15,7 +16,7 @@ const Video = (props) => {
         <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
             <video playsInline autoPlay ref={ref} />
             <div className="card-body">
-                <h5 className="card-title">Name</h5>
+                <h5 className="card-title">{props.peer.peerID}</h5>
                 <a href="/" className="btn btn-primary">Go somewhere</a>
             </div>
         </div>
@@ -26,6 +27,7 @@ const Room = (props) => {
     const [peers, setPeers] = useState([]);
     const userVideo = useRef();
     const peersRef = useRef([]);
+    const history = useHistory();
 
     useEffect(() => {
         const socket = io("http://localhost:5000");
@@ -58,6 +60,10 @@ const Room = (props) => {
         navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
             userVideo.current.srcObject = stream;
             socket.emit("join room", roomID);
+
+            socket.on("room full", () => {
+                history.push("/");
+            });
             socket.on("allExceptMe", users => {
                 let peers = [];
                 users.forEach( (receiver) => {
