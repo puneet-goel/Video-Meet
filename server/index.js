@@ -24,13 +24,11 @@ const users = {};
 const socketToRoom = {};
 
 io.on('connection', socket => {
-
-    socket.emit("myID", socket.id);
-    
+        
     socket.on("join room", roomID => {
         if (users.hasOwnProperty(roomID)) {
             const length = users[roomID].length;
-            if (length === 3) {
+            if (length === 5) {
                 socket.emit("room full");
                 return;
             }
@@ -58,11 +56,11 @@ io.on('connection', socket => {
         });
 
         socket.on("sending signal", (data) => {
-            io.to(data.receiver).emit('user-joined', { signal: data.signal, sender: data.sender });
+            socket.to(data.receiver).emit('user-joined', { signal: data.signal, sender: data.sender });
         });
     
         socket.on("returning signal", (data) => {
-            io.to(data.sender).emit('receiving returned signal', { signal: data.signal, receiver: socket.id });
+            socket.to(data.sender).emit('receiving returned signal', { signal: data.signal, receiver: socket.id });
         });
     });
 });
