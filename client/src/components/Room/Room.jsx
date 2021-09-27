@@ -9,8 +9,8 @@ const Video = (props) => {
     useEffect(() => {
         props.peer.on("stream", stream => {
             ref.current.srcObject = stream;
-        })
-    });
+        });
+    },[]);
 
     return (
         <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
@@ -32,9 +32,9 @@ const Room = (props) => {
 
     useEffect(() => {
         const socket = io("http://localhost:5000");
-
-        socket.on("myID", (id) => {
-            setMyID(id);
+        
+        socket.on("connect", () => {
+            setMyID(socket.id);
         });
 
         const roomID = props.match.params.roomId;
@@ -91,21 +91,15 @@ const Room = (props) => {
                     peer,
                 };
                 peersRef.current.push(x);
-                setPeers(users => {
-                    return [...users, x]
-                });
+                setPeers(users => {return [...users, x]});
             });
 
             socket.on("user-left", (id) => {
-                const item = peersRef.current.filter(p => p.peerID === id);
-                peersRef.current = peersRef.current.filter(p => p.peerID !== id);
-                setPeers(users => {
-                    let x = [...users];
-                    console.log(x);
-                    x = x.filter(p => p.peerID !== id);
-                    return x;
-                });
-                item[0].peer.destroy();
+                const item = peersRef.current.find(p => p.peerID === id);
+                const x = peersRef.current.filter(p => p.peerID !== id);
+                peersRef.current = x;
+                item.peer.destroy();
+                setPeers(x);
             });
 
             socket.on("receiving returned signal", (data) => {
@@ -114,7 +108,7 @@ const Room = (props) => {
             });
         })
     }, []);
-    
+
     return (
         <div className="container mt-5">
             <div className="row">
@@ -125,9 +119,9 @@ const Room = (props) => {
                         <a href="/" className="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
-                {peers.map((peer, index) => {
+                {peers.map((peer) => {
                     return (
-                        <Video key={index} peer={peer.peer} id={peer.peerID}/>
+                        <Video key={peer.peerID} peer={peer.peer} id={peer.peerID}/>
                     );
                 })}  
             </div>
