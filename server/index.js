@@ -20,41 +20,29 @@ app.get("/",(req,res) => {
     res.send("Caller API ");
 });
 
-const users = {};
-const socketToRoom = {};
-
 io.on('connection', socket => {
         
-    socket.on("join room", roomID => {
-        if (users.hasOwnProperty(roomID)) {
-            const length = users[roomID].length;
-            if (length === 5) {
-                socket.emit("room full");
-                return;
-            }
-            users[roomID].push(socket.id);
-        } else {
-            users[roomID] = [socket.id];
+    socket.on("join room", async(roomID) => {
+        const peers = await io.in(roomID).fetchSockets();
+        if(peers.length === 5){
+            socket.emit("room full");
+            return;
         }
-        socket.join(roomID);
-        socketToRoom[socket.id] = roomID;
-        const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
+        let usersInThisRoom = [];
+        for(const peer of peers){
+            usersInThisRoom.push(peer.id);   
+        }
+
+        socket.join(roomID);
         socket.emit("allExceptMe", usersInThisRoom);
 
-        socket.on('disconnect', () => {
-            const roomID = socketToRoom[socket.id];
-            delete socketToRoom[socket.id]; 
-
-            let room = users[roomID].filter(id => id !== socket.id);
-            users[roomID] = room;
-            if (room.length === 0) {
-                delete users[roomID];
-            }else {
-                socket.to(roomID).emit("user-left",socket.id);
-            }
+        socket.on('disconnecting', () =>{
+            const room = socket.rooms;
+            const roomID = [...room.keys()];
+            socket.broadcast.to(roomID[1]).emit("user-left",socket.id);
         });
-
+    
         socket.on("sending signal", (data) => {
             socket.to(data.receiver).emit('user-joined', { signal: data.signal, sender: data.sender });
         });

@@ -71,10 +71,10 @@ const Room = (props) => {
                 history.push("/");
             });
             socket.on("allExceptMe", users => {
-                let peers = [];
+                const peers = [];
                 users.forEach( (receiver) => {
                     const peer = createPeer(receiver, socket.id, stream);
-                    let x = {
+                    const x = {
                         peerID: receiver,
                         peer,
                     };
@@ -86,19 +86,19 @@ const Room = (props) => {
 
             socket.on("user-joined", (data) => {
                 const peer = addPeer(data.signal, data.sender, stream);
-                let x = {
+                const x = {
                     peerID: data.sender,
                     peer,
                 };
                 peersRef.current.push(x);
-                setPeers(users => {return [...users, x]});
+                setPeers([...peersRef.current]);
             });
 
             socket.on("user-left", (id) => {
                 const item = peersRef.current.find(p => p.peerID === id);
+                item.peer.destroy();
                 const x = peersRef.current.filter(p => p.peerID !== id);
                 peersRef.current = x;
-                item.peer.destroy();
                 setPeers(x);
             });
 
