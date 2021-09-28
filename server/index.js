@@ -20,6 +20,12 @@ app.get("/",(req,res) => {
     res.send("Caller API ");
 });
 
+let curRooms = [];
+
+app.get("/rooms", (req,res) => {
+    res.status(200).json(curRooms);
+});
+
 io.on('connection', socket => {
         
     socket.on("join room", async(roomID) => {
@@ -27,6 +33,10 @@ io.on('connection', socket => {
         if(peers.length === 5){
             socket.emit("room full");
             return;
+        }
+
+        if(peers.length === 0){
+            curRooms.push(roomID);
         }
 
         let usersInThisRoom = [];
@@ -37,9 +47,15 @@ io.on('connection', socket => {
         socket.join(roomID);
         socket.emit("allExceptMe", usersInThisRoom);
 
-        socket.on('disconnecting', () =>{
+        socket.on('disconnecting', async() =>{
             const room = socket.rooms;
             const roomID = [...room.keys()];
+
+            const peers = await io.in(roomID[1]).fetchSockets();
+            if(peers.length === 1){
+                curRooms = curRooms.filter((cur) => cur !== roomID[1]);
+            }
+
             socket.broadcast.to(roomID[1]).emit("user-left",socket.id);
         });
     
