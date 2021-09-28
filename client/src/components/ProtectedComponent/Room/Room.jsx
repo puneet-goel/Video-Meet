@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import io from "socket.io-client";
 import Peer from "simple-peer";
+import url from "../../../baseUrl.js";
 
 const Video = (props) => {
     const ref = useRef();
@@ -31,7 +32,7 @@ const Room = (props) => {
     const history = useHistory();
 
     useEffect(() => {
-        const socket = io("http://localhost:5000");
+        const socket = io(url);
         
         socket.on("connect", () => {
             setMyID(socket.id);
