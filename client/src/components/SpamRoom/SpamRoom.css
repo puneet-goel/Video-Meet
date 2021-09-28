@@ -1,0 +1,61 @@
+*{
+  font-family: 'Montserrat', sans-serif; 
+}
+
+.notfound {
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  max-width: 520px;
+  line-height: 1.4;
+}
+
+.four{
+  font-size: 146px;
+  font-weight: 700;
+  color: #232323;
+}
+
+.cry{
+  width: 120px;
+  height: 120px;
+  background-image: url('../../images/emoji.png');
+  background-size: cover;
+  -webkit-transform: scale(1.4);
+  -ms-transform: scale(1.4);
+  transform: scale(1.4);
+}
+
+.oops{
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #232323;
+}
+
+.text {
+  color: #787878;
+}
+
+#home{
+  font-weight: 700;
+  background-color: #f99827;
+  color: #fff;
+  border-radius: 40px;
+}
+
+#home:hover {
+  opacity: 0.8;
+}
+
+@media only screen and (max-width: 767px) {
+  .four {
+    font-size: 86px;
+  }
+  .cry {
+    width: 86px;
+    height: 86px;
+  }
+}

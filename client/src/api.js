@@ -13,7 +13,8 @@ export const checkRoom = async(room) => {
 		}
 		return true;
 	}catch(error){
-		console.log(error);
+		//console.log(error);
+		return false;
 	}
     
 }
@@ -24,7 +25,8 @@ export const updateRooms = async(id) => {
 		const {data} = await axios.patch(url + "rooms", id);
 		return data;
 	}catch(error){
-		console.log(error);
+		//console.log(error);
+		return false;
 	}
 
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route } from "react-router-dom";
 import Room from "./Room/Room.jsx";
-import NoRoom from "./NoRoom/NoRoom.jsx";
+import SpamRoom from "../SpamRoom/SpamRoom.jsx";
 import { checkRoom } from "../../api.js";
 
 const ProtectedRoute = (props)  => {
@@ -25,7 +25,7 @@ const ProtectedRoute = (props)  => {
 	    	{
                 (isThisValidRoom === true)
                 ? <Route component={Room} /> 
-                : <Route component={NoRoom} />
+                : <Route component={SpamRoom} />
             }
 	    </div>
     );
