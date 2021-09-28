@@ -5,16 +5,26 @@ import url from "./baseUrl.js";
 export const checkRoom = async(room) => {
 
     try{
-		const {data} = await axios.get(url+"rooms");
+		const {data} = await axios.get(url + "rooms");
         const a = data.find((r) => r === room);
 
-        if(a !== room){
-            return true;
-        }
-
-        return false;
+		if(a === undefined){
+			return false;
+		}
+		return true;
 	}catch(error){
 		console.log(error);
 	}
     
+}
+
+export const updateRooms = async(id) => {
+
+	try{
+		const {data} = await axios.patch(url + "rooms", id);
+		return data;
+	}catch(error){
+		console.log(error);
+	}
+
 }

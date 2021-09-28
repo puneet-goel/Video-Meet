@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import "./Home.css";
 import { v1 as uuid } from "uuid";
+import "./Home.css";
+import { updateRooms } from "../../api.js";
 
 const Home = () => {
 
-    let history = useHistory();
+    const history = useHistory();
+    const [room,setRoom] = useState(undefined);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         localStorage.setItem('name',event.target.name.value);
-        let room = uuid();
-        history.push(`/${room}`);
+        setRoom(uuid());
     }
+
+    useEffect(() => {
+        const update = async() => {
+            const response = await updateRooms(room);
+            history.push(`/${room}`);
+        }
+
+        if(room !== undefined){
+            update();
+        }
+    }, [room]);
 
     return(
         <div className="p-5 m-5 d-flex justify-content-center w-100">

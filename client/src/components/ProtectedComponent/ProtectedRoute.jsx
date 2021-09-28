@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route } from "react-router-dom";
 import Room from "./Room/Room.jsx";
 import NoRoom from "./NoRoom/NoRoom.jsx";
-import * as api  from "../../api.js";
+import { checkRoom } from "../../api.js";
 
-const ProtectedRoute = (props) => {
+const ProtectedRoute = (props)  => {
 
-    const isThisValidRoom = api.checkRoom(props.match.params.roomId);
+    const [isThisValidRoom,setIsThisValidRoom] = useState(undefined);
+
+    useEffect(() => {
+        const check = async() => {
+            const response = await checkRoom(props.match.params.roomId);
+            setIsThisValidRoom(response);
+        }
+        check();
+    }, []);
+    
+    if(isThisValidRoom === undefined){
+        return <div></div>
+    }
 
     return (
     	<div>

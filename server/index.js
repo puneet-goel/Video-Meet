@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
@@ -7,7 +8,11 @@ import cors from "cors";
 dotenv.config(); 
 
 const app = express();
+
 app.use(cors());
+app.use(bodyParser.json({ limit: "30mb", extended: true}));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true}));
+
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
@@ -26,17 +31,26 @@ app.get("/rooms", (req,res) => {
     res.status(200).json(curRooms);
 });
 
-io.on('connection', socket => {
+app.patch("/rooms", (req,res) => {
+
+	const roomID = req.body;
+    for (const key in roomID){
+        const isPresent = curRooms.find((r) => r === key);
+        if(!isPresent){
+            curRooms.push(key);
+        }
+    }
+	
+	res.status(200).json("Room added");
+});
+
+io.on('connection', (socket) => {
         
     socket.on("join room", async(roomID) => {
         const peers = await io.in(roomID).fetchSockets();
         if(peers.length === 5){
             socket.emit("room full");
             return;
-        }
-
-        if(peers.length === 0){
-            curRooms.push(roomID);
         }
 
         let usersInThisRoom = [];
@@ -50,6 +64,11 @@ io.on('connection', socket => {
         socket.on('disconnecting', async() =>{
             const room = socket.rooms;
             const roomID = [...room.keys()];
+
+            //when user has joined no room
+            if(roomID.length === 1){
+                return;
+            }
 
             const peers = await io.in(roomID[1]).fetchSockets();
             if(peers.length === 1){
