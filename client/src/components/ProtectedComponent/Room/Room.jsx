@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import io from "socket.io-client";
 import Peer from "simple-peer";
-import url from "../../../baseUrl.js";
+import { SocketContext } from '../../../context/socket.js';
 
 const Video = (props) => {
     const ref = useRef();
@@ -25,20 +24,22 @@ const Video = (props) => {
 }
 
 const Room = (props) => {
+
     const [peers, setPeers] = useState([]);
     const [myID, setMyID] = useState(0);
     const userVideo = useRef();
     const peersRef = useRef([]);
     const history = useHistory();
 
+    const socket = useContext(SocketContext);
+
     useEffect(() => {
-        const socket = io(url);
         
         socket.on("connect", () => {
             setMyID(socket.id);
         });
 
-        const roomID = props.match.params.roomId;
+        const roomID = props.room;
         const createPeer = (receiver, sender, stream) => {
             const peer = new Peer({
                 initiator: true,
