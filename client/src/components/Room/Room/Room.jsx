@@ -18,7 +18,7 @@ const Video = (props) => {
         <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
             <video playsInline autoPlay ref={ref} />
             <div className="card-body">
-                <h5 className="card-title">{props.id}</h5>
+                <h5 className="card-title">{props.name}</h5>
             </div>
         </div>
     );
@@ -29,8 +29,9 @@ const Room = (props) => {
     const [peers, setPeers] = useState(() => []);
     const [video, setVideo] = useState(() => sessionStorage.getItem('video') === 'true');
     const [audio, setAudio] = useState(() => sessionStorage.getItem('audio') === 'true');
-
+    
     const myVideo = useRef();
+    const myName = useRef(sessionStorage.getItem('name'));
     const peersRef = useRef([]);
     
     const history = useHistory();
@@ -53,14 +54,15 @@ const Room = (props) => {
 
         const socket = io(url);
         const roomID = props.roomID;
-        const createPeer = (receiver, sender, stream) => {
+        
+        const createPeer = (receiver, senderName, sender, stream) => {
             const peer = new Peer({
                 initiator: true,
                 trickle: false,
                 stream,
             });
             peer.on("signal", signal => {
-                socket.emit("sending signal", { receiver, signal, sender })
+                socket.emit("sending signal", { receiver, senderName, signal, sender })
             });
             return peer;
         }
@@ -80,19 +82,25 @@ const Room = (props) => {
 
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             myVideo.current.srcObject = stream; 
+            
+            //syncing video and audio with landing page(AskPermission)
             myVideo.current.srcObject.getTracks()[0].enabled = audio;
             myVideo.current.srcObject.getTracks()[1].enabled = video;
-            socket.emit("join room", roomID);
+            
+            socket.emit("join room", roomID, myName.current);
 
             socket.on("room full", () => {
                 history.push("/");
             });
+
             socket.on("allExceptMe", users => {
                 const peers = [];
+                //receiver[0] = id, receiver[1] =name
                 users.forEach( (receiver) => {
-                    const peer = createPeer(receiver, socket.id, stream);
+                    const peer = createPeer(receiver[0], myName.current, socket.id, stream);
                     const x = {
-                        peerID: receiver,
+                        peerID: receiver[0],
+                        peerName: receiver[1],
                         peer,
                     };
                     peersRef.current.push(x);
@@ -105,6 +113,7 @@ const Room = (props) => {
                 const peer = addPeer(data.signal, data.sender, stream);
                 const x = {
                     peerID: data.sender,
+                    peerName: data.senderName,
                     peer,
                 };
                 peersRef.current.push(x);
@@ -132,13 +141,14 @@ const Room = (props) => {
                 <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
                     <video className="card-img-top" muted ref={myVideo} autoPlay playsInline />
                     <div className="card-body">
+                        <h5 className="card-title">{myName.current}</h5>
                         <button onClick={handleVideo} className="btn btn-primary">Cam</button>
                         <button onClick={handleAudio} className="btn btn-primary">Mic</button>
                     </div>
                 </div>
                 {peers.map((peer) => {
                     return (
-                        <Video key={peer.peerID} peer={peer.peer} id={peer.peerID}/>
+                        <Video key={peer.peerID} peer={peer.peer} name={peer.peerName}/>
                     );
                 })}  
             </div>

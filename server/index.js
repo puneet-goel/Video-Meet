@@ -34,7 +34,11 @@ app.get("/rooms", (req,res) => {
 
 io.on('connection', (socket) => {
         
-    socket.on("join room", async(roomID) => {
+    socket.on("join room", async(roomID,name) => {
+
+        //assign username to the socket 
+        socket.data.username = name;
+
         const peers = await io.in(roomID).fetchSockets();
         if(peers.length === 5){
             socket.emit("room full");
@@ -43,7 +47,7 @@ io.on('connection', (socket) => {
 
         let usersInThisRoom = [];
         for(const peer of peers){
-            usersInThisRoom.push(peer.id);   
+            usersInThisRoom.push([peer.id,peer.data.username]);   
         }
 
         socket.join(roomID);
@@ -62,7 +66,7 @@ io.on('connection', (socket) => {
         });
     
         socket.on("sending signal", (data) => {
-            socket.to(data.receiver).emit('user-joined', { signal: data.signal, sender: data.sender });
+            socket.to(data.receiver).emit('user-joined', { signal: data.signal, sender: data.sender, senderName: data.senderName });
         });
     
         socket.on("returning signal", (data) => {
