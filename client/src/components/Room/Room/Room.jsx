@@ -27,10 +27,27 @@ const Video = (props) => {
 const Room = (props) => {
 
     const [peers, setPeers] = useState(() => []);
+    const [video, setVideo] = useState(() => sessionStorage.getItem('video') === 'true');
+    const [audio, setAudio] = useState(() => sessionStorage.getItem('audio') === 'true');
+
     const myVideo = useRef();
     const peersRef = useRef([]);
     
     const history = useHistory();
+
+    const handleVideo = (event) => {
+        event.preventDefault();
+        sessionStorage.setItem("video",!video);
+        setVideo((cur) => !cur);
+        myVideo.current.srcObject.getTracks()[1].enabled = !video;
+    };
+
+    const handleAudio = (event) => {
+        event.preventDefault();
+        sessionStorage.setItem("audio",!audio);
+        setAudio((cur) => !cur);
+        myVideo.current.srcObject.getTracks()[0].enabled = !audio;
+    };
 
     useEffect(() => {
 
@@ -112,6 +129,10 @@ const Room = (props) => {
             <div className="row">
                 <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
                     <video className="card-img-top" muted ref={myVideo} autoPlay playsInline />
+                    <div className="card-body">
+                        <button onClick={handleVideo} className="btn btn-primary">Cam</button>
+                        <button onClick={handleAudio} className="btn btn-primary">Mic</button>
+                    </div>
                 </div>
                 {peers.map((peer) => {
                     return (

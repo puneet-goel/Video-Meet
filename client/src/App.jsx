@@ -9,8 +9,8 @@ import AskPermission from "./components/Room/AskPermission/AskPermission.jsx";
 const App = () => {
 
   sessionStorage.setItem("isRoomValid",false);
-  sessionStorage.setItem("video",false);
-  sessionStorage.setItem("audio",false);
+  sessionStorage.setItem("video",true);
+  sessionStorage.setItem("audio",true);
   sessionStorage.setItem("RoomID",null);
   sessionStorage.setItem("name",'');
   
