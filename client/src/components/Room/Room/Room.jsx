@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Peer from "simple-peer";
-import { SocketContext } from '../../../context/socket.js';
+import io from "socket.io-client";
+
+import url from "../../../baseUrl.js";
 
 const Video = (props) => {
     const ref = useRef();
@@ -17,7 +19,6 @@ const Video = (props) => {
             <video playsInline autoPlay ref={ref} />
             <div className="card-body">
                 <h5 className="card-title">{props.id}</h5>
-                <a href="/" className="btn btn-primary">Go somewhere</a>
             </div>
         </div>
     );
@@ -25,21 +26,16 @@ const Video = (props) => {
 
 const Room = (props) => {
 
-    const [peers, setPeers] = useState([]);
-    const [myID, setMyID] = useState(0);
-    const userVideo = useRef();
+    const [peers, setPeers] = useState(() => []);
+    const myVideo = useRef();
     const peersRef = useRef([]);
+    
     const history = useHistory();
 
-    const socket = useContext(SocketContext);
-
     useEffect(() => {
-        
-        socket.on("connect", () => {
-            setMyID(socket.id);
-        });
 
-        const roomID = props.room;
+        const socket = io(url);
+        const roomID = props.roomID;
         const createPeer = (receiver, sender, stream) => {
             const peer = new Peer({
                 initiator: true,
@@ -65,8 +61,8 @@ const Room = (props) => {
             return peer;
         }
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
-            userVideo.current.srcObject = stream;
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+            myVideo.current.srcObject = stream; 
             socket.emit("join room", roomID);
 
             socket.on("room full", () => {
@@ -108,18 +104,14 @@ const Room = (props) => {
                 const item = peersRef.current.find(p => p.peerID === data.receiver);
                 item.peer.signal(data.signal);
             });
-        })
+        });
     }, []);
 
     return (
         <div className="container mt-5">
             <div className="row">
                 <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
-                    <video className="card-img-top" muted ref={userVideo} autoPlay playsInline />
-                    <div className="card-body">
-                        <h5 className="card-title">Me - {myID}</h5>
-                        <a href="/" className="btn btn-primary">Go somewhere</a>
-                    </div>
+                    <video className="card-img-top" muted ref={myVideo} autoPlay playsInline />
                 </div>
                 {peers.map((peer) => {
                     return (

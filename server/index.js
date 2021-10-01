@@ -31,19 +31,6 @@ app.get("/rooms", (req,res) => {
     res.status(200).json(curRooms);
 });
 
-app.patch("/rooms", (req,res) => {
-
-	const roomID = req.body;
-    for (const key in roomID){
-        const isPresent = curRooms.find((r) => r === key);
-        if(!isPresent){
-            curRooms.push(key);
-        }
-    }
-	
-	res.status(200).json("Room added");
-});
-
 io.on('connection', (socket) => {
         
     socket.on("join room", async(roomID) => {
@@ -51,6 +38,9 @@ io.on('connection', (socket) => {
         if(peers.length === 5){
             socket.emit("room full");
             return;
+        }
+        if(peers.length === 0){
+            curRooms.push(roomID);
         }
 
         let usersInThisRoom = [];

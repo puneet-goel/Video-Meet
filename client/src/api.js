@@ -1,32 +1,21 @@
 import axios from "axios";
+
 import url from "./baseUrl.js";
 
 //axios return a promise, so anything not nested inside .then gets executed immediately.
 export const checkRoom = async(room) => {
 
     try{
-		const {data} = await axios.get(url + "rooms");
-        const a = data.find((r) => r === room);
-
-		if(a === undefined){
-			return false;
-		}
-		return true;
+		const {data : rooms} = await axios.get(url + "/rooms");
+		let flag = false;
+		for(const key of rooms){
+            if(key === room){
+				flag = true;
+			}   
+        }
+		return flag;
 	}catch(error){
-		//console.log(error);
+		// console.log(error);
 		return false;
-	}
-    
-}
-
-export const updateRooms = async(id) => {
-
-	try{
-		const {data} = await axios.patch(url + "rooms", id);
-		return data;
-	}catch(error){
-		//console.log(error);
-		return false;
-	}
-
+	}   
 }

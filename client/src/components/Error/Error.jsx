@@ -1,9 +1,10 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import "./SpamRoom.css";
+
+import "./Error.css";
 
 //when user tried to redirect to a room that don't exist
-const SpamRoom = () => {
+const Error = () => {
 
     const history = useHistory();
     const homePage = (event) => {
@@ -25,4 +26,4 @@ const SpamRoom = () => {
     );
 }
 
-export default SpamRoom;
+export default Error;
