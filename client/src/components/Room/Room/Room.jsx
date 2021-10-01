@@ -80,6 +80,8 @@ const Room = (props) => {
 
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             myVideo.current.srcObject = stream; 
+            myVideo.current.srcObject.getTracks()[0].enabled = audio;
+            myVideo.current.srcObject.getTracks()[1].enabled = video;
             socket.emit("join room", roomID);
 
             socket.on("room full", () => {
