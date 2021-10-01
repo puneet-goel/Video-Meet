@@ -8,10 +8,10 @@ import AskPermission from "./components/Room/AskPermission/AskPermission.jsx";
 
 const App = () => {
 
+  //browser storage
   sessionStorage.setItem("isRoomValid",false);
   sessionStorage.setItem("video",true);
   sessionStorage.setItem("audio",true);
-  sessionStorage.setItem("RoomID",null);
   sessionStorage.setItem("name",'');
   
   //  Conditional Rendering 

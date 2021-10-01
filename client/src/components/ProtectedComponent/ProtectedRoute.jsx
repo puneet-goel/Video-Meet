@@ -8,10 +8,9 @@ const ProtectedRoute = (props)  => {
     const history =  useHistory();
     useEffect(() => {
         const roomID = props.match.params.roomID;
-        const roomInBroswerStorage = sessionStorage.getItem("RoomID");
         const check  = async() => {
             const response = await checkRoom(roomID); 
-            if(response === true || roomID === roomInBroswerStorage) {
+            if(response === true) {
                 //history get executed once this component unmounts and everything after this gets executed
                 sessionStorage.setItem("isRoomValid",true);
                 history.push(`/${roomID}`);
@@ -19,6 +18,7 @@ const ProtectedRoute = (props)  => {
                 history.push(`/uh-oh`);
             }
         }
+
         check();
     }, []);
 

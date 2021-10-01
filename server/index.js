@@ -22,13 +22,14 @@ const io = new Server(server, {
 });
 
 app.get("/",(req,res) => {
-    res.send("Caller API ");
+    res.send("Video Meet (V-Meet) API ");
 });
 
-let curRooms = [];
-
 app.get("/rooms", (req,res) => {
-    res.status(200).json(curRooms);
+    const data = io.of('/').adapter.rooms;
+    const rooms = [...data.keys()];
+    const ans = rooms.filter((a) => !data.get(a).has(a));
+    res.send(ans);
 });
 
 io.on('connection', (socket) => {
@@ -38,9 +39,6 @@ io.on('connection', (socket) => {
         if(peers.length === 5){
             socket.emit("room full");
             return;
-        }
-        if(peers.length === 0){
-            curRooms.push(roomID);
         }
 
         let usersInThisRoom = [];
@@ -58,11 +56,6 @@ io.on('connection', (socket) => {
             //when user has joined no room
             if(roomID.length === 1){
                 return;
-            }
-
-            const peers = await io.in(roomID[1]).fetchSockets();
-            if(peers.length === 1){
-                curRooms = curRooms.filter((cur) => cur !== roomID[1]);
             }
 
             socket.broadcast.to(roomID[1]).emit("user-left",socket.id);
