@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import Room from "../Room/Room.jsx";
+import coolName from "./nameGenerator.js";
 
 const AskPermission = (props) => {
 
-    const [name, setName] = useState("Random Name");
+    const [name, setName] = useState(() => coolName());
     const [ask, setAsk] = useState(false);
     const [video, setVideo] = useState(true);
     const [audio, setAudio] = useState(true);
@@ -38,6 +39,7 @@ const AskPermission = (props) => {
 
     useEffect(() => {
 
+        sessionStorage.setItem("name",name);
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then((currentStream) => {
             myVideo.current.srcObject = currentStream;
