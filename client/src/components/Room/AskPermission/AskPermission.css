@@ -1,12 +1,8 @@
-body{
-  background: #181a1b;
-  color: floralwhite;
-}
-
 .tablet {
   position: relative;
   height: 450px;
-  border: 16px rgb(140, 130, 115) solid;
+  border: 16px solid;
+  color: #000000;
   border-top-width: 60px;
   border-bottom-width: 60px;
   border-radius: 36px;
@@ -22,7 +18,7 @@ body{
   top: -30px;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #333;
+  background: #fff;
   border-radius: 10px;
 }
 
@@ -36,14 +32,13 @@ body{
   left: 50%;
   bottom: -65px;
   transform: translate(-50%, -50%);
-  background: #333;
+  background: #fff;
   border-radius: 50%;
 }
 
 /* The screen (or content) of the device */
 .content {
   height: 331px;
-  background: #181a1b;
   margin: -1px;
 }
 
@@ -54,6 +49,8 @@ body{
 
 /* Buttons */
 .btn-icon {
+  width: 70px;
+  height: 70px;
   border-radius: 50px;
 }
 
@@ -80,5 +77,14 @@ i{
 
   .content {
     height: 282px;
+  }
+  
+  .btn-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icons{
+    font-size: 1em;
   }
 }

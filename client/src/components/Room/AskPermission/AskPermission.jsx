@@ -66,28 +66,28 @@ const AskPermission = (props) => {
                             </div>
                         </div>
 
-                        <div className="col-12 col-lg-6 m-auto">
-                            <div className="input-group mb-4">
-                                <span className="input-group-text">@Username</span>
-                                <input type="text" name="user" className="form-control" placeholder={name} onChange={handleName} />
+                        <div className="col-12 col-lg-6 m-auto ">
+                            <label for="basic-url" className="form-label mb-1">@Username</label>
+                            <input type="text" name="user" className="form-control mb-4" placeholder={name} onChange={handleName} />
+                            <div className="d-flex justify-content-between mb-5">
+                                <button onClick={handleVideo} className="btn btn-dark btn-icon">
+                                    {
+                                        (video)
+                                        ?<i className="bi bi-camera-video-fill fa-2x icons" />
+                                        :<i className="bi bi-camera-video-off-fill fa-2x icons" />
+                                    }
+                                </button>
+                                <button onClick={handleAudio} className="btn btn-dark btn-icon">
+                                    {
+                                        (audio)
+                                        ?<i className="fa fa-microphone fa-2x icons" />
+                                        :<i className="fa fa-microphone-slash fa-2x icons" />
+                                    }
+                                </button>
+                                <button onClick={handleJoin} className="btn btn-dark btn-icon">
+                                    <i className="fa fa-handshake-o fa-2x icons" />
+                                </button>
                             </div>
-                            <button onClick={handleVideo} className="btn btn-secondary btn-icon mx-3">
-                                {
-                                    (video)
-                                    ?<i className="fa fa-video-camera fa-2x" />
-                                    :<i className="fa fa-video-camera-slash fa-2x" />
-                                }
-                            </button>
-                            <button onClick={handleAudio} className="btn btn-secondary btn-icon mx-3">
-                                {
-                                    (audio)
-                                    ?<i className="fa fa-microphone fa-2x" />
-                                    :<i className="fa fa-microphone-slash fa-2x" />
-                                }
-                            </button>
-                            <button onClick={handleJoin} className="btn btn-secondary btn-icon mx-3">
-                                <i class="fa fa-handshake-o fa-2x" />
-                            </button>
                         </div>
                     </div>
                 </div>)
