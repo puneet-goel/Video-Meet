@@ -53,6 +53,10 @@ io.on('connection', (socket) => {
         socket.join(roomID);
         socket.emit("allExceptMe", usersInThisRoom);
 
+        socket.on('forceDisconnect', () => {
+            socket.disconnect();
+        });
+
         socket.on('disconnecting', async() =>{
             const room = socket.rooms;
             const roomID = [...room.keys()];

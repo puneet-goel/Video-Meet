@@ -31,6 +31,7 @@ const Room = (props) => {
     const [audio, setAudio] = useState(() => sessionStorage.getItem('audio') === 'true');
     
     const myVideo = useRef();
+    const socket = useRef(io(url));
     const myName = useRef(sessionStorage.getItem('name'));
     const peersRef = useRef([]);
     
@@ -50,9 +51,14 @@ const Room = (props) => {
         myVideo.current.srcObject.getTracks()[0].enabled = !audio;
     };
 
+    const handleLeave = (event) => {
+        event.preventDefault();
+        socket.current.emit('forceDisconnect');
+        history.push('/');
+    }
+
     useEffect(() => {
 
-        const socket = io(url);
         const roomID = props.roomID;
         
         const createPeer = (receiver, senderName, sender, stream) => {
@@ -62,7 +68,7 @@ const Room = (props) => {
                 stream,
             });
             peer.on("signal", signal => {
-                socket.emit("sending signal", { receiver, senderName, signal, sender })
+                socket.current.emit("sending signal", { receiver, senderName, signal, sender })
             });
             return peer;
         }
@@ -74,7 +80,7 @@ const Room = (props) => {
             });
     
             peer.on("signal", signal => {
-                socket.emit("returning signal", { signal, sender });
+                socket.current.emit("returning signal", { signal, sender });
             });
             peer.signal(incomingSignal);
             return peer;
@@ -87,17 +93,17 @@ const Room = (props) => {
             myVideo.current.srcObject.getTracks()[0].enabled = audio;
             myVideo.current.srcObject.getTracks()[1].enabled = video;
             
-            socket.emit("join room", roomID, myName.current);
+            socket.current.emit("join room", roomID, myName.current);
 
-            socket.on("room full", () => {
+            socket.current.on("room full", () => {
                 history.push("/");
             });
 
-            socket.on("allExceptMe", users => {
+            socket.current.on("allExceptMe", users => {
                 const peers = [];
                 //receiver[0] = id, receiver[1] =name
                 users.forEach( (receiver) => {
-                    const peer = createPeer(receiver[0], myName.current, socket.id, stream);
+                    const peer = createPeer(receiver[0], myName.current, socket.current.id, stream);
                     const x = {
                         peerID: receiver[0],
                         peerName: receiver[1],
@@ -109,7 +115,7 @@ const Room = (props) => {
                 setPeers(peers);
             });
 
-            socket.on("user-joined", (data) => {
+            socket.current.on("user-joined", (data) => {
                 const peer = addPeer(data.signal, data.sender, stream);
                 const x = {
                     peerID: data.sender,
@@ -120,7 +126,7 @@ const Room = (props) => {
                 setPeers([...peersRef.current]);
             });
 
-            socket.on("user-left", (id) => {
+            socket.current.on("user-left", (id) => {
                 const item = peersRef.current.find(p => p.peerID === id);
                 item.peer.destroy();
                 const x = peersRef.current.filter(p => p.peerID !== id);
@@ -128,7 +134,7 @@ const Room = (props) => {
                 setPeers(x);
             });
 
-            socket.on("receiving returned signal", (data) => {
+            socket.current.on("receiving returned signal", (data) => {
                 const item = peersRef.current.find(p => p.peerID === data.receiver);
                 item.peer.signal(data.signal);
             });
@@ -144,6 +150,7 @@ const Room = (props) => {
                         <h5 className="card-title">{myName.current}</h5>
                         <button onClick={handleVideo} className="btn btn-primary">Cam</button>
                         <button onClick={handleAudio} className="btn btn-primary">Mic</button>
+                        <button onClick={handleLeave} className="btn btn-primary">Leave</button>
                     </div>
                 </div>
                 {peers.map((peer) => {
