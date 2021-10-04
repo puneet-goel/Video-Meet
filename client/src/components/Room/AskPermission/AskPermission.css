@@ -54,10 +54,6 @@
   border-radius: 50px;
 }
 
-i{
-  color: floralwhite;
-}
-
 @media only screen and (max-width: 600px) {
   .tablet {
     height: 350px;

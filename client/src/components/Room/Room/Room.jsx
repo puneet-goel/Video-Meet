@@ -16,11 +16,11 @@ const Video = (props) => {
     },[]);
 
     return (
-        <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
-            <video playsInline autoPlay ref={ref} />
-            <div className="card-body">
-                <h5 className="card-title">{props.name}</h5>
+        <div className="col-12 col-md-6 col-lg-6 mx-3 mt-3" >
+            <div className="ratio ratio-4x3">
+                <video playsInline autoPlay ref={ref} />
             </div>
+            <h6 className="text-center text-white mt-3">{props.name}</h6>
         </div>
     );
 }
@@ -156,10 +156,15 @@ const Room = (props) => {
     }, []);
 
     return (
-        <div class="container-fluid">
-            <div class="row">
-                <div class="video-grid d-flex p-5">
-                    <video className="card-img-top" muted ref={myVideo} autoPlay playsInline />
+        <div className="container-fluid room bg-dark">
+            <div className="row vh-100">
+                <div className="video-grid d-flex p-5">
+                    <div className="col-12 col-md-6 col-lg-6 mx-3 mt-3" >
+                        <div className="ratio ratio-4x3">
+                            <video playsInline autoPlay ref={myVideo} />
+                        </div>
+                        <h6 className="text-center text-white mt-3">{myName.current}</h6>
+                    </div>
                     {peers.map((peer) => {
                         return (
                             <Video key={peer.peerID} peer={peer.peer} name={peer.peerName}/>
@@ -167,31 +172,29 @@ const Room = (props) => {
                     })}  
                 </div>
     
-                <div class="controls bg-dark p-3 d-flex fixed-bottom">
-                    <div class="d-flex">
-                        <div class="control_button">
-                            <i class="fas fa-microphone"></i>
+                <div className="controls p-3 d-flex fixed-bottom">
+                    <div className="d-flex">
+                        <div className="control_button p-1 d-flex">
+                            <i onClick={handleAudio} className="fas fa-microphone"></i>
                             <span>Mute</span>
                         </div>
-                        <div class="control_button" >
-                            <i class="fas fa-video"></i>
+                        <div className="control_button p-1 d-flex">
+                            <i onClick={handleVideo} className="fas fa-video"></i>
                             <span>Stop Video</span>
                         </div>
                     </div>
-                    <div class="d-flex">
-                        <div class="control_button">
-                            <i class="fas fa-user-friends"></i>
+                    <div className="d-flex">
+                        <div className="control_button p-1 d-flex">
+                            <i className="fas fa-user-friends"></i>
                             <span>Participants</span>
                         </div>
-                        <div class="control_button">
-                            <i class="fas fa-comment-alt"></i>
+                        <div className="control_button p-1 d-flex">
+                            <i className="fas fa-comment-alt"></i>
                             <span>Chat</span>
                         </div>
                     </div>
-                    <div class="d-flex">
-                        <div class="control_button">
-                            <span class="leave">Leave Meeting</span>
-                        </div>
+                    <div className="control_button p-1 d-flex">
+                        <span onClick={handleLeave} className="leave">Leave Meeting</span>
                     </div>
                 </div>
             </div>

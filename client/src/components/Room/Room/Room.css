@@ -1,20 +1,22 @@
+.room{
+  height: auto;
+  overflow: auto;
+}
+
 .video-grid{
   justify-content: center;
   flex-wrap: wrap;
-  height: 100vh;
 }
 
 .controls {
-  color: floralwhite;
+  background-color: #00000069;
   justify-content: space-between;
 }
 
 .control_button{
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 8px 10px;
   min-width: 80px;
   cursor: pointer;
 }
@@ -32,9 +34,36 @@
   color: #EB534B;
 }
 
-video{
-  height: 300px;
-  width: 400px;
-  object-fit: cover;
-  padding: 8px;
+@media only screen and (max-width: 320px) {
+  .control_button {
+    min-width: 55px;
+  }
+
+  .control_button i {
+    font-size: 18px;
+  }
+
+  .control_button span{
+    font-size: 13px;
+  }
+}
+
+@media only screen and (max-width: 425px) and (min-width: 322px){
+  .control_button {
+    min-width: 65px;
+  }
+
+  .control_button span{
+    text-align: center;
+  }
+}
+
+@media only screen and (min-width: 1440px){
+  .control_button i {
+    font-size: 40px;
+  }
+
+  .control_button span{
+    font-size: 30px;
+  }
 }
