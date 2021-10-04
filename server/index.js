@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
         socket.join(roomID);
 
         //send everyone in the room that socket joined
-        socket.to(roomID).emit('incoming messsage', { message: `${name} joined`, sender: socket.id,  type: 'user-join' });
+        socket.to(roomID).emit('incoming messsage', { message: `${name} joined`, sender: socket.id, name: name,  type: 'user-join' });
         
         socket.emit('allExceptMe', usersInThisRoom);
 
@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
                 return;
             }
 
-            socket.broadcast.to(roomID[1]).emit('incoming message', { message: `${name} left`, sender: socket.id,  type: 'user-left' });
+            socket.broadcast.to(roomID[1]).emit('incoming message', { message: `${name} left`, sender: socket.id, name: name,  type: 'user-left' });
             socket.broadcast.to(roomID[1]).emit('user-left',socket.id);
         });
     
@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
         //Chat Functionality
         //there are three types of message => user joined => user message => user left
         socket.on('send message', (data) => {
-            socket.to(data.roomID).emit('incoming messsage', { message: data.message, sender: data.sender, type: 'user-message' });
+            socket.to(data.roomID).emit('incoming messsage', { message: data.message, sender: data.sender, name: data.name, type: 'user-message' });
         });
     });
 });

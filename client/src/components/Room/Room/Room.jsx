@@ -4,6 +4,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 
 import url from "../../../baseUrl.js";
+import "./Room.css";
 
 const Video = (props) => {
     const ref = useRef();
@@ -138,26 +139,61 @@ const Room = (props) => {
                 const item = peersRef.current.find(p => p.peerID === data.receiver);
                 item.peer.signal(data.signal);
             });
+
+            socket.current.on("incoming-message", (data) => {
+                //message, sender, type
+                const messages = JSON.parse(sessionStorage.getItem('messages')) || [];
+                
+                messages.push({
+                    message: data.message,
+                    sender: data.sender,
+                    type: data.type,
+                });
+
+                sessionStorage.setItem('rooms', JSON.stringify(messages));
+            });
         });
     }, []);
 
     return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="card col-sm-12 col-md-6 col-lg-4 mx-3" >
+        <div class="container-fluid">
+            <div class="row">
+                <div class="video-grid d-flex p-5">
                     <video className="card-img-top" muted ref={myVideo} autoPlay playsInline />
-                    <div className="card-body">
-                        <h5 className="card-title">{myName.current}</h5>
-                        <button onClick={handleVideo} className="btn btn-primary">Cam</button>
-                        <button onClick={handleAudio} className="btn btn-primary">Mic</button>
-                        <button onClick={handleLeave} className="btn btn-primary">Leave</button>
+                    {peers.map((peer) => {
+                        return (
+                            <Video key={peer.peerID} peer={peer.peer} name={peer.peerName}/>
+                        );
+                    })}  
+                </div>
+    
+                <div class="controls bg-dark p-3 d-flex fixed-bottom">
+                    <div class="d-flex">
+                        <div class="control_button">
+                            <i class="fas fa-microphone"></i>
+                            <span>Mute</span>
+                        </div>
+                        <div class="control_button" >
+                            <i class="fas fa-video"></i>
+                            <span>Stop Video</span>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="control_button">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Participants</span>
+                        </div>
+                        <div class="control_button">
+                            <i class="fas fa-comment-alt"></i>
+                            <span>Chat</span>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="control_button">
+                            <span class="leave">Leave Meeting</span>
+                        </div>
                     </div>
                 </div>
-                {peers.map((peer) => {
-                    return (
-                        <Video key={peer.peerID} peer={peer.peer} name={peer.peerName}/>
-                    );
-                })}  
             </div>
         </div>
     );
