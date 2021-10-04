@@ -68,7 +68,7 @@ const AskPermission = (props) => {
                     </div>
 
                     <div className="col-12 col-lg-6 m-auto ">
-                        <label htmlFor="username" className="form-label mb-1">@Username</label>
+                        <label htmlFor="username" className="form-label mb-1 text-dark">@Username</label>
                         <input type="text" name="user" className="form-control mb-4" placeholder={name} onChange={handleName} />
                         <div className="d-flex justify-content-between mb-5">
                             <button onClick={handleVideo} className="btn btn-dark btn-icon">

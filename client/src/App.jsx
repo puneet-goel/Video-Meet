@@ -5,14 +5,11 @@ import Home from "./components/Home/Home.jsx";
 import ProtectedRoute from "./components/ProtectedComponent/ProtectedRoute.jsx";
 import Error from './components/Error/Error.jsx';
 import AskPermission from "./components/Room/AskPermission/AskPermission.jsx";
+import init from './storageInit.js';
 
 const App = () => {
 
-  //browser storage
-  sessionStorage.setItem("isRoomValid",false);
-  sessionStorage.setItem("video",true);
-  sessionStorage.setItem("audio",true);
-  sessionStorage.setItem("name",'');
+  init();
   
   //  Conditional Rendering 
   const Check = (props) => {
