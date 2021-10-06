@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 
 import { checkRoom } from "../../api.js"
+import Loader from "../Loader/Loader.jsx";
 
 const ProtectedRoute = (props)  => {
 
@@ -23,7 +24,8 @@ const ProtectedRoute = (props)  => {
     }, []);
 
     return (
-    	<div className="h-100 w-100 bg-dark">
+    	<div className="vh-100 bg-dark">
+            <Loader />
         </div>
     );
 }

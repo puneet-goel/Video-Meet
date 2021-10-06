@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
-import Home from "./components/Home/Home.jsx";
 import ProtectedRoute from "./components/ProtectedComponent/ProtectedRoute.jsx";
+import AskPermission from "./components/AskPermission/AskPermission.jsx";
 import Error from './components/Error/Error.jsx';
-import AskPermission from "./components/Room/AskPermission/AskPermission.jsx";
+import Home from "./components/Home/Home.jsx";
 import init from './storageInit.js';
 
 const App = () => {

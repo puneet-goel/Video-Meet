@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import Peer from "simple-peer";
 import io from "socket.io-client";
 
-import url from "../../../baseUrl.js";
+import url from "../../baseUrl.js";
 import Videos from "./Videos/Videos.jsx";
 
 const Room = (props) => {

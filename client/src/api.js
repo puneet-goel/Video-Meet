@@ -33,3 +33,8 @@ export const addRoom = (roomID) => {
     rooms.push(roomID);
     localStorage.setItem('rooms', JSON.stringify(rooms));
 };
+
+export const getTime = () => {
+    const time = new Date();
+    return time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+}
