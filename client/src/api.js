@@ -1,4 +1,5 @@
 import axios from "axios";
+import { uniqueNamesGenerator, adjectives, names, starWars } from "unique-names-generator";
 
 import url from "./baseUrl.js";
 
@@ -37,4 +38,28 @@ export const addRoom = (roomID) => {
 export const getTime = () => {
     const time = new Date();
     return time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-}
+};
+  
+export const coolName = () => {
+    const configA = {
+        dictionaries: [adjectives, names],
+        separator: "_",
+        length: 2,
+        style: "lowerCase"
+    };
+  
+    const A = uniqueNamesGenerator(configA);
+
+    const configB = {
+        dictionaries: [starWars]
+    };
+  
+    const B = uniqueNamesGenerator(configB);
+
+    const randomNumber = Math.floor(Math.random()*2);
+    if(randomNumber === 0){
+        return A;
+    }
+    
+    return B;
+};

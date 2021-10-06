@@ -2,17 +2,58 @@ import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Peer from "simple-peer";
 import io from "socket.io-client";
+import { v1 as uuid } from "uuid";
 
 import url from "../../baseUrl.js";
-import Videos from "./Videos/Videos.jsx";
+import { getTime } from "../../api.js";
+import "./Room.css";
+import "./Chat.css";
+
+const Video = (props) => {
+    const ref = useRef();
+
+    useEffect(() => {
+        props.peer.on("stream", stream => {
+            ref.current.srcObject = stream;
+        });
+    },[]);
+
+    return (
+        <div className="video-element d-flex">
+            <div class="ratio ratio-1x1">
+                <video playsInline autoPlay ref={ref} />
+            </div>
+        </div>
+    );
+}
+
+const Message = ({message, id}) => {
+
+    return (
+        <li className={`msg ${message.dir}-msg mb-1`}>
+            <div className="msg-bubble p-1">
+                <div className="msg-info ">
+                    <div className="fw-bold mr-1">{message.name}</div>
+                    <div className="msg-info-time">{message.time}</div>
+                </div>
+                {message.message}
+            </div>
+        </li>
+    );
+}
 
 const Room = (props) => {
+
+    const roomID = props.roomID;
 
     const [peers, setPeers] = useState(() => []);
     const [video, setVideo] = useState(() => sessionStorage.getItem('video') === 'true');
     const [audio, setAudio] = useState(() => sessionStorage.getItem('audio') === 'true');
-    
+    const [chat,setChat] = useState(() => []);
+    const [message,setMessage] = useState(() => '');
+
     const myVideo = useRef();
+    
     const socket = useRef(io(url));
     const myName = useRef(sessionStorage.getItem('name'));
     const peersRef = useRef([]);
@@ -39,9 +80,25 @@ const Room = (props) => {
         history.push('/');
     }
 
-    useEffect(() => {
+    const messageChange = (event) => {
+        event.preventDefault();
+        setMessage(event.target.value);
+    }
 
-        const roomID = props.roomID;
+    const sendMessage = (event) => {
+        event.preventDefault();
+        socket.current.emit('send message',{
+            message: message, 
+            sender: socket.current.id, 
+            name: myName.current,   
+            type: 'user-message',
+            time: getTime(),
+            roomID: roomID
+        });
+        setMessage('');
+    }
+
+    useEffect(() => {
         
         const createPeer = (receiver, senderName, sender, stream) => {
             const peer = new Peer({
@@ -121,24 +178,87 @@ const Room = (props) => {
                 item.peer.signal(data.signal);
             });
 
-            socket.current.on("incoming-message", (data) => {
-                //message, sender, type
-                const messages = JSON.parse(sessionStorage.getItem('messages')) || [];
+            socket.current.on("incoming message", (data) => {
                 
-                messages.push({
-                    message: data.message,
-                    sender: data.sender,
-                    type: data.type,
-                });
+                let dir = 'left';
+                if(data.sender === socket.current.id){
+                    dir = 'right';
+                }
 
-                sessionStorage.setItem('rooms', JSON.stringify(messages));
+                if(data.type === 'user-join' || data.type === 'user-left'){
+                    dir = 'center';
+                }
+
+                const x = {
+                    id: uuid(),
+                    message: data.message,
+                    name: data.name,
+                    dir: dir,
+                    time: data.time
+                };
+
+                setChat((cur) => [...cur,x]);
             });
+
+        }).catch(err => {
+            console.log(err);
         });
     }, []);
 
     return (
-        <Videos myVideo={myVideo} myName={myName} peers={peers} handleAudio={handleAudio} handleVideo={handleVideo} handleLeave={handleLeave} />
+        <div className="main">
+
+            <div className="videos_left">
+                <div className="main_videos p-3">
+                    <div id="video-grid">
+                        <div className="video-element d-flex">
+                            <div class="ratio ratio-1x1">
+                                <video playsInline autoPlay muted ref={myVideo} />
+                            </div>
+                        </div>
+                        {peers.map((peer) => {
+                            return (
+                                <Video key={peer.peerID} peer={peer.peer} name={peer.peerName}/>
+                            );
+                        })}  
+                    </div>
+                </div>
+                <div className="main_controls">
+                    <div className="d-flex">
+                        <div onClick={handleAudio} className={`text-${audio?'white':'danger'} control_button`}>
+                            <i className={`fa fa-microphone${audio?'':'-slash'}`} />
+                        </div>
+                        <div onClick={handleVideo} className={`text-${video?'white':'danger'} control_button`}>
+                            <i className={`bi bi-camera-video${video?'':'-off'}-fill`} />
+                        </div>
+                    </div>
+                    <div className="d-flex">
+                        <div className="control_button text-white">
+                            <i className="fas fa-user-friends" />
+                        </div>
+                        <div onClick={handleLeave} className="control_button text-danger">
+                            <i className="fas fa-phone" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="chat_right">
+                <div className="chat_header p-1">
+                    <i className="fas fa-comment-alt" />Chat
+                </div>
+                <div className="chat_window">
+                    <ul className="messages">
+                    </ul>
+                </div>
+                <div className="chat_form">
+                    <input className="message_send" placeholder='Type message here...' value={message} onChange={messageChange}/>
+                    <i className="fa fa-paper-plane" onClick={sendMessage} ></i> 
+                </div>
+            </div>
+
+        </div>
     )
 };
 
-export default Room;
+export default Room;                     

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import Room from "../Room/Room.jsx";
-import coolName from "./nameGenerator.js";
+import { coolName } from "../../api.js";
 import "./AskPermission.css";
 
 const AskPermission = (props) => {
@@ -72,18 +72,10 @@ const AskPermission = (props) => {
                         <input type="text" name="user" className="form-control mb-4" placeholder={name} onChange={handleName} />
                         <div className="d-flex justify-content-between mb-5">
                             <button onClick={handleVideo} className={`btn btn-${video?'dark':'danger'} btn-icon`}>
-                                {
-                                    (video)
-                                    ?<i className="bi bi-camera-video-fill fa-2x icons" />
-                                    :<i className="bi bi-camera-video-off-fill fa-2x icons" />
-                                }
+                                <i className={`bi bi-camera-video${video?'':'-off'}-fill fa-2x icons`} />
                             </button>
                             <button onClick={handleAudio} className={`btn btn-${audio?'dark':'danger'} btn-icon`}>
-                                {
-                                    (audio)
-                                    ?<i className="fa fa-microphone fa-2x icons" />
-                                    :<i className="fa fa-microphone-slash fa-2x icons" />
-                                }
+                                <i className={`fa fa-microphone${audio?'':'-slash'} fa-2x icons`} />
                             </button>
                             <button onClick={handleJoin} className="btn btn-danger btn-icon">
                                 <i className="fa fa-handshake-o fa-2x icons" />
