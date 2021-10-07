@@ -20,24 +20,28 @@ const Video = (props) => {
 
     return (
         <div className="video-element d-flex">
-            <div class="ratio ratio-1x1">
+            {/* <div class="ratio ratio-1x1"> */}
                 <video playsInline autoPlay ref={ref} />
-            </div>
+            {/* </div> */}
         </div>
     );
 }
 
 const Message = ({message, id}) => {
 
-    return (
-        <li className={`msg ${message.dir}-msg mb-1`}>
-            <div className="msg-bubble p-1">
-                <div className="msg-info ">
-                    <div className="fw-bold mr-1">{message.name}</div>
-                    <div className="msg-info-time">{message.time}</div>
-                </div>
+    if(message.dir === 'center'){
+        return (
+            <li className="message-center fw-bold">
                 {message.message}
-            </div>
+            </li>
+        );
+    }
+
+    return (
+        <li className={ `message-${message.dir} text-break`}>
+            <span className="fw-bold"> {message.name} </span> <br/>
+            <span> {message.message} </span><br />
+            <span className="fw-lighter fst-italic"> {message.time}</span>
         </li>
     );
 }
@@ -196,7 +200,6 @@ const Room = (props) => {
                     dir: dir,
                     time: data.time
                 };
-
                 setChat((cur) => [...cur,x]);
             });
 
@@ -212,9 +215,9 @@ const Room = (props) => {
                 <div className="main_videos p-3">
                     <div id="video-grid">
                         <div className="video-element d-flex">
-                            <div class="ratio ratio-1x1">
+                            {/* <div className="ratio ratio-1x1"> */}
                                 <video playsInline autoPlay muted ref={myVideo} />
-                            </div>
+                            {/* </div> */}
                         </div>
                         {peers.map((peer) => {
                             return (
@@ -249,6 +252,13 @@ const Room = (props) => {
                 </div>
                 <div className="chat_window">
                     <ul className="messages">
+                        {
+                            chat.map((cur) => {
+                                return(
+                                    <Message key={cur.id} message={cur} id={socket.current.id}/>
+                                )
+                            })
+                        }
                     </ul>
                 </div>
                 <div className="chat_form">
