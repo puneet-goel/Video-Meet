@@ -1,66 +1,94 @@
-.main {
-    height: 100vh;
-    display: flex;
+.room-videos{
+    background: linear-gradient(to right, #2d2e30 0%, #000000 100%);
 }
 
-/* videos */
-.videos_left {
-    flex: 0.8;
+.video-grid {
+    height: calc(100vh - 90px);  
     display: flex;
-    flex-direction: column;
-    background-image: url('../../images/wallpaper.jpg');
-}
-
-.main_videos {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    overflow-y: auto;
-}
-
-.main_videos::-webkit-scrollbar {
-    display: none;
-}
-  
-/* Hide scrollbar for IE, Edge and Firefox */
-.main_videos {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-.main_controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-}
-
-.control_button {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 10px;
-    min-width: 80px;
-    cursor: pointer;
-}
-
-.control_button i {
-    font-size: 30px;
-}
-
-#video-grid{
-    display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-video{
-    object-fit: cover;
-    padding: 8px;
+.video-element{
+    height: 130px;
 }
 
-.video-element{
-    height: 300px;
-    width: 400px;
+.controls{
+    height: 90px;
+}
+
+.control-block{
+    cursor: pointer;
+}
+
+.control-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-button i{
+    font-size: 25px;
+}
+
+@media only screen and (min-width: 768px) {
+    .video-grid {
+        height: calc(100vh - 150px);  
+    }
+
+    .video-element{
+        height: 190px;
+    }
+
+    .controls{
+        height: 150px;
+    }
+
+    .control-button{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .control-button i{
+        font-size: 30px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .video-element{
+        height: 250px;
+    }
+
+    .control-button{
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    
+    .control-button i{
+        font-size: 35px;
+    }
+}
+
+@media only screen and (min-width: 2560px) {
+    .video-grid {
+        height: calc(100vh - 350px);  
+    }
+
+    .video-element{
+        height: 500px;
+    }
+
+    .controls{
+        height: 350px;
+    }
+
+    .control-button{
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+
+    .control-button i{
+        font-size: 80px;
+    }
 }

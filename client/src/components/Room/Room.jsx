@@ -19,11 +19,7 @@ const Video = (props) => {
     },[]);
 
     return (
-        <div className="video-element d-flex">
-            {/* <div class="ratio ratio-1x1"> */}
-                <video playsInline autoPlay ref={ref} />
-            {/* </div> */}
-        </div>
+        <video className="video-element p-2" playsInline ref={ref} autoPlay />
     );
 }
 
@@ -31,18 +27,22 @@ const Message = ({message, id}) => {
 
     if(message.dir === 'center'){
         return (
-            <li className="message-center fw-bold">
+            <div className="d-flex justify-content-center fw-bold mb-3">
                 {message.message}
-            </li>
+            </div>
         );
     }
 
     return (
-        <li className={ `message-${message.dir} text-break`}>
-            <span className="fw-bold"> {message.name} </span> <br/>
-            <span> {message.message} </span><br />
-            <span className="fw-lighter fst-italic"> {message.time}</span>
-        </li>
+        <div className={`d-flex justify-content-${message.dir}`}>
+            <div className="message text-break mb-3 p-3">
+                <div className="fw-bold"> {message.name} </div>
+                <div className="my-2"> {message.message} </div>
+                <div className="d-flex justify-content-end">
+                    <div className="fw-italic"> {message.time} </div>
+                </div>
+            </div>
+        </div>
     );
 }
 
@@ -91,6 +91,12 @@ const Room = (props) => {
 
     const sendMessage = (event) => {
         event.preventDefault();
+
+        if(event.key !== 'Enter'){
+            setMessage(message + event.key);
+            return;
+        }
+
         socket.current.emit('send message',{
             message: message, 
             sender: socket.current.id, 
@@ -184,9 +190,9 @@ const Room = (props) => {
 
             socket.current.on("incoming message", (data) => {
                 
-                let dir = 'left';
+                let dir = 'start';
                 if(data.sender === socket.current.id){
-                    dir = 'right';
+                    dir = 'end';
                 }
 
                 if(data.type === 'user-join' || data.type === 'user-left'){
@@ -209,66 +215,60 @@ const Room = (props) => {
     }, []);
 
     return (
-        <div className="main">
+        <div className="container-fluid p-0">
+            <div className="row vh-100 m-0">
+                <main className="col-7 col-sm-8 p-0 bg-dark room-videos">
+                    <div className="video-grid overflow-auto">
 
-            <div className="videos_left">
-                <div className="main_videos p-3">
-                    <div id="video-grid">
-                        <div className="video-element d-flex">
-                            {/* <div className="ratio ratio-1x1"> */}
-                                <video playsInline autoPlay muted ref={myVideo} />
-                            {/* </div> */}
-                        </div>
+                        <video className="video-element p-2" playsInline ref={myVideo} autoPlay muted/>
+                        
                         {peers.map((peer) => {
                             return (
                                 <Video key={peer.peerID} peer={peer.peer} name={peer.peerName}/>
                             );
                         })}  
-                    </div>
-                </div>
-                <div className="main_controls">
-                    <div className="d-flex">
-                        <div onClick={handleAudio} className={`text-${audio?'white':'danger'} control_button`}>
-                            <i className={`fa fa-microphone${audio?'':'-slash'}`} />
-                        </div>
-                        <div onClick={handleVideo} className={`text-${video?'white':'danger'} control_button`}>
-                            <i className={`bi bi-camera-video${video?'':'-off'}-fill`} />
-                        </div>
-                    </div>
-                    <div className="d-flex">
-                        <div className="control_button text-white">
-                            <i className="fas fa-user-friends" />
-                        </div>
-                        <div onClick={handleLeave} className="control_button text-danger">
-                            <i className="fas fa-phone" />
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div className="chat_right">
-                <div className="chat_header p-1">
-                    <i className="fas fa-comment-alt" />Chat
-                </div>
-                <div className="chat_window">
-                    <ul className="messages">
-                        {
-                            chat.map((cur) => {
+                    </div>
+                    
+                    <nav className="navbar justify-content-center p-3 controls">
+                        <div className="control-block d-flex">
+                            <div onClick={handleAudio} className={`text-${audio?'white':'danger'} control-button p-2`}>
+                                <i className={`fa fa-microphone${audio?'':'-slash'}`} />
+                            </div>
+                            <div onClick={handleVideo} className={`text-${video?'white':'danger'} control-button p-2`}>
+                                <i className={`bi bi-camera-video${video?'':'-off'}-fill`} />
+                            </div>
+                            <div className="control-button text-white p-2">
+                                <i className="fas fa-user-friends"></i>
+                            </div>
+                            <div onClick={handleLeave} className="control-button text-danger p-2">
+                                <i className="fas fa-phone" />
+                            </div>
+                        </div>
+                    </nav>
+                </main>
+
+                <div className="col-5 col-sm-4 p-0 bg-dark room-chat">                    
+                    <div className="chat-header text-center text-white pt-2 p-1">
+                        <i className="fas fa-comment-alt p-1" /> Chat
+                    </div>
+                    <div className="chat-window overflow-auto text-break">
+                        <div className="messages">
+                            {chat.map((cur) => {
                                 return(
                                     <Message key={cur.id} message={cur} id={socket.current.id}/>
                                 )
-                            })
-                        }
-                    </ul>
-                </div>
-                <div className="chat_form">
-                    <input className="message_send" placeholder='Type message here...' value={message} onChange={messageChange}/>
-                    <i className="fa fa-paper-plane" onClick={sendMessage} ></i> 
+                            })}
+                        </div>
+                    </div>
+                    <nav className="navbar p-1 chat-form">
+                        <input className="input-message" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
+                    </nav>
                 </div>
             </div>
-
         </div>
-    )
+    );
+        
 };
 
-export default Room;                     
+export default Room; 
