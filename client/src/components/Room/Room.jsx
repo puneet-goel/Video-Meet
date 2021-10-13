@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Peer from "simple-peer";
 import io from "socket.io-client";
 import { v1 as uuid } from "uuid";
@@ -197,6 +199,19 @@ const Room = (props) => {
 
                 if(data.type === 'user-join' || data.type === 'user-left'){
                     dir = 'center';
+
+                    if(data.sender !== socket.current.id){
+                        toast(`${data.message}`, {
+                            position: "bottom-left",
+                            autoClose: 1500,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'dark'
+                        });
+                    }
                 }
 
                 const x = {
@@ -265,6 +280,17 @@ const Room = (props) => {
                         <input className="input-message" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
                     </nav>
                 </div>
+                <ToastContainer
+                    position="bottom-left"
+                    autoClose={1500}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss={false}
+                    draggable
+                    pauseOnHover
+                />
             </div>
         </div>
     );
