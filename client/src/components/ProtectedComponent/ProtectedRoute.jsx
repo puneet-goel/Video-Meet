@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 
 import { checkRoom } from "../../api.js"
-import Loader from "../Loader/Loader.jsx";
+import Loader from "../UI/Loader/Loader.jsx";
 
 const ProtectedRoute = (props)  => {
 

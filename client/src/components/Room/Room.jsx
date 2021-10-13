@@ -8,6 +8,7 @@ import { v1 as uuid } from "uuid";
 
 import url from "../../baseUrl.js";
 import { getTime } from "../../api.js";
+import ToolTip from "../UI/ToolTip/ToolTip.jsx";
 import "./Room.css";
 import "./Chat.css";
 
@@ -247,16 +248,16 @@ const Room = (props) => {
                     
                     <nav className="navbar justify-content-center p-3 controls">
                         <div className="control-block d-flex">
-                            <div onClick={handleAudio} className={`text-${audio?'white':'danger'} control-button p-2`}>
+                            <div onClick={handleAudio} className={`text-${audio?'white':'danger'} control-button p-2`} data-for="tool-tip" data-tip="Mic">
                                 <i className={`fa fa-microphone${audio?'':'-slash'}`} />
                             </div>
-                            <div onClick={handleVideo} className={`text-${video?'white':'danger'} control-button p-2`}>
+                            <div onClick={handleVideo} className={`text-${video?'white':'danger'} control-button p-2`} data-for="tool-tip" data-tip="Cam">
                                 <i className={`bi bi-camera-video${video?'':'-off'}-fill`} />
                             </div>
                             <div className="control-button text-white p-2">
                                 <i className="fas fa-user-friends"></i>
                             </div>
-                            <div onClick={handleLeave} className="control-button text-danger p-2">
+                            <div onClick={handleLeave} className="control-button text-danger p-2" data-for="tool-tip" data-tip="Leave">
                                 <i className="fas fa-phone" />
                             </div>
                         </div>
@@ -292,6 +293,7 @@ const Room = (props) => {
                     pauseOnHover
                 />
             </div>
+            <ToolTip />
         </div>
     );
         

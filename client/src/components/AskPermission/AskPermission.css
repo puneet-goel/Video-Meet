@@ -85,3 +85,13 @@
     font-size: 1.5em;
   }
 }
+
+@media only screen and (min-width: 2560px) {
+  .tablet{
+    height: 600px;
+  }
+
+  .content{
+    height: 480px;
+  }
+}
