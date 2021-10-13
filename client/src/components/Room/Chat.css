@@ -1,13 +1,11 @@
 :root {
     --left-msg-bg: #232627;
     --right-msg-bg: #044497;
-    --border-chat-bg: #3D3D42;
-    --room-start-bg: #2d2e30;
-    --room-end-bg: #000000; 
+    --border-chat-bg: #3D3D42; 
 }
 
 .room-chat{
-    background: linear-gradient(to left, var(--room-start-bg) 0%, var(--room-end-bg) 100%);
+    background: #1c1c1c;
     border-left: 1px solid var(--border-chat-bg);
 }
 

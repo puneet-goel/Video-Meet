@@ -1,5 +1,5 @@
 .room-videos{
-    background: linear-gradient(to right, #2d2e30 0%, #000000 100%);
+    background: black;
 }
 
 .video-grid {
@@ -15,6 +15,7 @@
 }
 
 .controls{
+    background: #282828a6;
     height: 90px;
 }
 
@@ -28,21 +29,18 @@
     align-items: center;
 }
 
+.control-button:hover {
+    background-color: #343434;
+    border-radius: 5px;
+}
+
 .control-button i{
     font-size: 25px;
 }
 
 @media only screen and (min-width: 768px) {
-    .video-grid {
-        height: calc(100vh - 150px);  
-    }
-
     .video-element{
         height: 190px;
-    }
-
-    .controls{
-        height: 150px;
     }
 
     .control-button{
@@ -70,9 +68,19 @@
     }
 }
 
+@media only screen and (min-width: 1440px) {
+    .video-grid {
+        height: calc(100vh - 100px);  
+    }
+
+    .controls{
+        height: 100px;
+    }
+}
+
 @media only screen and (min-width: 2560px) {
     .video-grid {
-        height: calc(100vh - 350px);  
+        height: calc(100vh - 240px);  
     }
 
     .video-element{
@@ -80,7 +88,7 @@
     }
 
     .controls{
-        height: 350px;
+        height: 240px;
     }
 
     .control-button{

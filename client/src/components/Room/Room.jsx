@@ -232,7 +232,7 @@ const Room = (props) => {
     return (
         <div className="container-fluid p-0">
             <div className="row vh-100 m-0">
-                <main className="col-7 col-sm-8 p-0 bg-dark room-videos">
+                <main className="col-7 col-sm-8 p-0 room-videos">
                     <div className="video-grid overflow-auto">
 
                         <video className="video-element p-2" playsInline ref={myVideo} autoPlay muted/>
@@ -263,7 +263,7 @@ const Room = (props) => {
                     </nav>
                 </main>
 
-                <div className="col-5 col-sm-4 p-0 bg-dark room-chat">                    
+                <div className="col-5 col-sm-4 p-0 room-chat">                    
                     <div className="chat-header text-center text-white pt-2 p-1">
                         <i className="fas fa-comment-alt p-1" /> Chat
                     </div>
