@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import Room from "../Room/Room.jsx";
-import { coolName } from "../../api.js";
+import { coolName, addParticipant } from "../../api.js";
 import ToolTip from "../UI/ToolTip/ToolTip.jsx";
 import "./AskPermission.css";
 
@@ -30,6 +30,7 @@ const AskPermission = (props) => {
 
     const handleJoin = (event) => {
         event.preventDefault();
+        addParticipant(0, name);
         setAsk(true);
     };
 

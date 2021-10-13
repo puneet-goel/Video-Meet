@@ -63,3 +63,19 @@ export const coolName = () => {
     
     return B;
 };
+
+export const addParticipant = (id, name) => {
+    const participants = JSON.parse(sessionStorage.getItem('participants'));
+
+    participants.push({
+        key: id,
+        name: name
+    });
+    sessionStorage.setItem('participants', JSON.stringify(participants));
+}
+
+export const removeParticipant = (id) => {
+    let participants = JSON.parse(sessionStorage.getItem('participants')) || [];
+    participants = participants.filter(participant => participant.key !== id);
+    sessionStorage.setItem('participants', JSON.stringify(participants));
+}

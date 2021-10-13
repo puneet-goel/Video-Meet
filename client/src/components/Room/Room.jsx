@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Peer from "simple-peer";
 import io from "socket.io-client";
 import { v1 as uuid } from "uuid";
+import 'react-toastify/dist/ReactToastify.css';
 
 import url from "../../baseUrl.js";
-import { getTime } from "../../api.js";
+import { getTime, addParticipant, removeParticipant } from "../../api.js";
 import ToolTip from "../UI/ToolTip/ToolTip.jsx";
+import PopOver from "../UI/PopOver/PopOver.jsx";
 import "./Room.css";
 import "./Chat.css";
 
@@ -39,7 +40,7 @@ const Message = ({message, id}) => {
     return (
         <div className={`d-flex justify-content-${message.dir}`}>
             <div className="message text-break mb-3 p-3">
-                <div className="fw-bold"> {message.name} </div>
+                <div className="fw-bold text-center"> {message.name} </div>
                 <div className="my-2"> {message.message} </div>
                 <div className="d-flex justify-content-end">
                     <div className="fw-italic"> {message.time} </div>
@@ -161,6 +162,8 @@ const Room = (props) => {
                         peerName: receiver[1],
                         peer,
                     };
+
+                    addParticipant(receiver[0], receiver[1]);
                     peersRef.current.push(x);
                     peers.push(x);
                 });
@@ -174,6 +177,7 @@ const Room = (props) => {
                     peerName: data.senderName,
                     peer,
                 };
+                addParticipant(data.sender, data.senderName);
                 peersRef.current.push(x);
                 setPeers([...peersRef.current]);
             });
@@ -183,6 +187,7 @@ const Room = (props) => {
                 item.peer.destroy();
                 const x = peersRef.current.filter(p => p.peerID !== id);
                 peersRef.current = x;
+                removeParticipant(id);
                 setPeers(x);
             });
 
@@ -254,8 +259,8 @@ const Room = (props) => {
                             <div onClick={handleVideo} className={`text-${video?'white':'danger'} control-button p-2`} data-for="tool-tip" data-tip="Cam">
                                 <i className={`bi bi-camera-video${video?'':'-off'}-fill`} />
                             </div>
-                            <div className="control-button text-white p-2">
-                                <i className="fas fa-user-friends"></i>
+                            <div className="control-button text-white p-2" id="participants" >
+                                <i className="fas fa-user-friends" />
                             </div>
                             <div onClick={handleLeave} className="control-button text-danger p-2" data-for="tool-tip" data-tip="Leave">
                                 <i className="fas fa-phone" />
@@ -281,19 +286,20 @@ const Room = (props) => {
                         <input className="input-message" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
                     </nav>
                 </div>
-                <ToastContainer
-                    position="bottom-left"
-                    autoClose={1500}
-                    hideProgressBar={false}
-                    newestOnTop
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss={false}
-                    draggable
-                    pauseOnHover
-                />
             </div>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+            />
             <ToolTip />
+            <PopOver />
         </div>
     );
         
