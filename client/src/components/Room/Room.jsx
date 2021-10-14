@@ -23,7 +23,7 @@ const Video = (props) => {
     },[]);
 
     return (
-        <video className="video-element p-2" playsInline ref={ref} autoPlay />
+        <video className="video-element m-2" playsInline ref={ref} autoPlay />
     );
 }
 
@@ -241,7 +241,7 @@ const Room = (props) => {
                 <main className="col-7 col-sm-8 p-0 room-videos">
                     <div className="video-grid overflow-auto">
 
-                        <video className="video-element p-2" playsInline ref={myVideo} autoPlay muted/>
+                        <video className="video-element m-2" playsInline ref={myVideo} autoPlay muted/>
                         
                         {peers.map((peer) => {
                             return (
@@ -283,7 +283,7 @@ const Room = (props) => {
                         </div>
                     </div>
                     <nav className="navbar p-1 chat-form">
-                        <input className="input-message" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
+                        <input className="input-message" spellCheck="false" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
                     </nav>
                 </div>
             </div>

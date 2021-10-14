@@ -30,7 +30,15 @@ const AskPermission = (props) => {
 
     const handleJoin = (event) => {
         event.preventDefault();
-        addParticipant(0, name);
+        
+        if(name === ''){
+            const x = coolName();
+            sessionStorage.setItem("name",x);
+            addParticipant(0, x);
+        }else{
+            addParticipant(0, name);
+        }
+        
         setAsk(true);
     };
 

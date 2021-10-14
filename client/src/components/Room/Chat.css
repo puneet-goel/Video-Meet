@@ -11,10 +11,11 @@
 
 .chat-header{
     font-size: 13px;
+    border-bottom: 1px solid var(--border-chat-bg);
 }
 
 .chat-window{
-    height: calc(100vh - 83px); 
+    height: calc(100vh - 84px); 
 }
 
 .messages{
@@ -67,7 +68,7 @@
     }
 
     .chat-window{
-        height: calc(100vh - 107px); 
+        height: calc(100vh - 108px); 
     }
 
     .messages{
@@ -90,7 +91,7 @@
     }
 
     .chat-window{
-        height: calc(100vh - 125px); 
+        height: calc(100vh - 126px); 
     }
 
     .messages{
@@ -104,32 +105,5 @@
 
     .input-message {
         font-size: 28px;
-    }
-}
-
-@media only screen and (min-width: 2560px) {
-    .chat-header{
-        font-size: 40px;
-    }
-
-    .chat-window{
-        height: calc(100vh - 240px); 
-    }
-
-    .messages{
-        font-size: xxx-large;
-        padding: 2rem !important;
-    }
-
-    .message{
-        padding: 2rem !important;
-    }
-
-    .chat-form{
-        height: 160px;
-    }
-
-    .input-message {
-        font-size: 56px;
     }
 }
