@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { v1 as uuid } from "uuid";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { addRoom } from "../../api.js";
+import { addRoom, sendEmail } from "../../api.js";
 import Clock from "../UI/Clock/Clock.jsx";
 import "./Home.css";
 
@@ -12,6 +12,11 @@ const Home = () => {
 
     const [room, setRoom] = useState(() => '');
     const [index,setIndex] = useState(() => 0);
+    const [share,setShare] = useState(() => false);
+    const [emailDetails,setEmailDetails] = useState({
+        name: '',
+        emails: ''
+    });
 
     const history = useHistory();
 
@@ -22,23 +27,52 @@ const Home = () => {
         addRoom(roomID);
     }
 
-    const handleInput = (event) => {
-        event.preventDefault();
-        setRoom(event.target.value);
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        history.push(`/check/${room}`);
-    }
-
     const handleClear = (event) => {
         event.preventDefault();
         setRoom('');
     }
+    
+    const handleShare = (event) => {
+        event.preventDefault();
+        setShare((cur) => !cur);
+    }
 
     const changeHeader = () => {
         setIndex((cur) => (cur+1)%3);
+    }
+
+    const handleChange = (event) => {
+        event.preventDefault();
+        const target = event.target.name;
+        if(target === 'room'){
+            setRoom(event.target.value);
+        }else if(target === 'emails'){
+            setEmailDetails({
+                ...emailDetails,
+                emails: event.target.value
+            });
+        }else if(target === 'name'){
+            setEmailDetails({
+                ...emailDetails,
+                name: event.target.value
+            });
+        }
+    }
+
+    const handleJoin = (event) => {
+        event.preventDefault();
+        history.push(`/check/${room}`);
+    }
+
+    const handleEmailSent = (event) => {
+        event.preventDefault();
+        alert("Email sent successfully!!!");
+        sendEmail(room,emailDetails.emails,emailDetails.name);
+        setEmailDetails({
+            name: '',
+            emails: ''
+        });
+        setShare(false);
     }
 
     useEffect(() => {
@@ -59,11 +93,21 @@ const Home = () => {
                         <h6 className="fst-italic mt-3">V Meet is the Video Conferencing app. It’s free and simple. Invite friends for a group call.</h6>
                     </div>
                     <div className="input-group room-input pt-sm-5">
-                        <input name="room" spellCheck="false" className="form-control" placeholder="Enter Room Code" onChange={handleInput} value={room} />
+                        <input name="room" spellCheck="false" className="form-control" placeholder="Enter Room Code" onChange={handleChange} value={room} />
                         <span className="input-group-text dustbin" onClick={handleClear} > 
                             <i className="fas fa-trash" />
                         </span>
                     </div>
+                    {
+                        (!share)?<div />:
+                        <div className="input-group room-input pt-3 pt-sm-5">
+                            <input name="name" spellCheck="false" className="form-control" placeholder="Your Name" onChange={handleChange} value={emailDetails.name} />
+                            <input name="emails" spellCheck="false" className="form-control" placeholder="xyz@example.com" onChange={handleChange} value={emailDetails.emails} />
+                            <span className="input-group-text mail" onClick={handleEmailSent} > 
+                                <i className="fas fa-paper-plane" />
+                            </span>
+                        </div>
+                    }
                 </div>
 
                 <div className="col-12 col-sm-6 pt-sm-5 right-function">
@@ -86,17 +130,17 @@ const Home = () => {
                                 <h6 className="pt-3">Copy</h6>
                             </div>
                         </div>
-                        <div className="block2">
+                        <div className="block2 ms-3">
                             <div className="d-flex flex-column align-items-center">
-                                <button onClick={handleSubmit} type="submit" className="btn btn-primary function">
-                                    <i className="bi bi-plus-square-fill p-1" />
+                                <button onClick={handleJoin} type="submit" className="btn btn-primary function">
+                                    <i className="bi bi-plus-square-fill p-2" />
                                 </button>
                                 <h6 className="pt-3">Join</h6>
                             </div>
 
                             <div className="d-flex flex-column align-items-center">
-                                <button onClick={handleSubmit} type="submit" className="btn function func-share">
-                                    <i className="fas fa-share-alt p-1" />
+                                <button onClick={handleShare}  type="submit" className="btn function func-share">
+                                    <i className="fas fa-share-alt p-2" />
                                 </button>
                                 <h6 className="pt-3">Share</h6>
                             </div>

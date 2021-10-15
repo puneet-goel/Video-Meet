@@ -29,6 +29,19 @@ export const checkRoom = async(roomID) => {
 	}   
 }
 
+export const sendEmail = async(link,users,name) => {
+    try{
+	    await axios.post(url + "/sendMail",{
+            link: link,
+            users: users,
+            name: name
+        });
+
+	}catch(error){
+		// console.log(error);
+	}   
+};
+
 export const addRoom = (roomID) => {
     const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
     rooms.push(roomID);

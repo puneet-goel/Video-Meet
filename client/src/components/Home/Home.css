@@ -14,12 +14,16 @@ body{
     outline: none;
 }
 
-.dustbin{
+.dustbin, .mail{
     cursor: pointer;
 }
 
 .dustbin i{
     color: red;
+}
+
+.mail i{
+    color: green;
 }
 
 .right-function{
