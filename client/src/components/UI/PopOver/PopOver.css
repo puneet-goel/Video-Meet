@@ -1,0 +1,14 @@
+.popover-body{
+    background: #1c1c1c;
+    color: #cdcdc8;
+}
+
+.popover-inner h3{
+    background: #1c1c1c;
+    color: #cdcdc8;
+    border-bottom: 1px solid #efefef26;
+}
+
+.popover-inner{
+    border: 1px solid #efefef26;
+}

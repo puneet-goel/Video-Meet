@@ -4,11 +4,13 @@ import { v1 as uuid } from "uuid";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { addRoom, sendEmail } from "../../api.js";
+import init from "../../storageInit.js";
 import Clock from "../UI/Clock/Clock.jsx";
 import "./Home.css";
 
 const Home = () => {
-    const arr = ['V','Video','We'];
+    const arr = ['V','We','Video'];
+    init();
 
     const [room, setRoom] = useState(() => '');
     const [index,setIndex] = useState(() => 0);
@@ -124,13 +126,13 @@ const Home = () => {
                             <div className="d-flex flex-column align-items-center">
                                 <CopyToClipboard text={room} >
                                     <button className="btn btn-primary function" >
-                                        <i className="fas fa-copy p-1" /> 
+                                        <i className="fas fa-copy p-2" /> 
                                     </button>
                                 </CopyToClipboard>
                                 <h6 className="pt-3">Copy</h6>
                             </div>
                         </div>
-                        <div className="block2 ms-3">
+                        <div className="block2 ms-1 ms-sm-2">
                             <div className="d-flex flex-column align-items-center">
                                 <button onClick={handleJoin} type="submit" className="btn btn-primary function">
                                     <i className="bi bi-plus-square-fill p-2" />

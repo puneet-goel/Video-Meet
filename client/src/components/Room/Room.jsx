@@ -15,19 +15,17 @@ import "./Chat.css";
 
 const Video = (props) => {
     const ref = useRef();
-
-    useEffect(() => {
-        props.peer.on("stream", stream => {
-            ref.current.srcObject = stream;
-        });
-    },[]);
+    
+    props.peer.on("stream", stream => {
+        ref.current.srcObject = stream;
+    });
 
     return (
         <video className="video-element m-2" playsInline ref={ref} autoPlay />
     );
 }
 
-const Message = ({message, id}) => {
+const Message = ({message}) => {
 
     if(message.dir === 'center'){
         return (
@@ -143,12 +141,13 @@ const Room = (props) => {
             myVideo.current.srcObject = stream; 
             
             //syncing video and audio with landing page(AskPermission)
-            myVideo.current.srcObject.getTracks()[0].enabled = audio;
-            myVideo.current.srcObject.getTracks()[1].enabled = video;
+            myVideo.current.srcObject.getTracks()[0].enabled = sessionStorage.getItem('audio') === 'true';
+            myVideo.current.srcObject.getTracks()[1].enabled = sessionStorage.getItem('video') === 'true';
             
             socket.current.emit("join room", roomID, myName.current);
 
             socket.current.on("room full", () => {
+                alert("Room full!");
                 history.push("/");
             });
 
@@ -233,7 +232,7 @@ const Room = (props) => {
         }).catch(err => {
             console.log(err);
         });
-    }, []);
+    }, [history, roomID]);
 
     return (
         <div className="container-fluid p-0">
@@ -277,7 +276,7 @@ const Room = (props) => {
                         <div className="messages">
                             {chat.map((cur) => {
                                 return(
-                                    <Message key={cur.id} message={cur} id={socket.current.id}/>
+                                    <Message key={cur.id} message={cur}/>
                                 )
                             })}
                         </div>

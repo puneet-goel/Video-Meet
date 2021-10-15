@@ -21,7 +21,7 @@ const ProtectedRoute = (props)  => {
         }
 
         check();
-    }, []);
+    }, [history,props]);
 
     return (
     	<div className="vh-100 bg-dark">

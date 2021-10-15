@@ -86,6 +86,12 @@
   }
 }
 
+@media only screen and (min-width: 992px) {
+  .permission{
+    height:100vh;
+  }
+}
+
 @media only screen and (min-width: 2560px) {
   .tablet{
     height: 600px;

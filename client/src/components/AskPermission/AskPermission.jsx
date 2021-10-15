@@ -31,26 +31,19 @@ const AskPermission = (props) => {
     const handleJoin = (event) => {
         event.preventDefault();
         
-        if(name === ''){
-            const x = coolName();
-            sessionStorage.setItem("name",x);
-            addParticipant(0, x);
-        }else{
-            addParticipant(0, name);
-        }
-        
+        let x = (name === '')?coolName():name;        
+        sessionStorage.setItem("name",x);
+        addParticipant(0,x);
         setAsk(true);
     };
 
     const handleName =(event) => {
         event.preventDefault();
-        sessionStorage.setItem("name",event.target.value);
         setName(event.target.value);
     }
 
     useEffect(() => {
 
-        sessionStorage.setItem("name",name);
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then((currentStream) => {
             myVideo.current.srcObject = currentStream;
@@ -67,7 +60,7 @@ const AskPermission = (props) => {
     return (
         <div >
             <div className="container-fluid">
-                <div className="row vh-100">
+                <div className="row permission">
                     
                     <div className="col-12 col-lg-6 m-auto">
                         <div className="tablet m-5"> 
