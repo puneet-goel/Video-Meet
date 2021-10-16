@@ -72,7 +72,7 @@ const AskPermission = (props) => {
 
                     <div className="col-12 col-lg-6 m-auto px-5">
                         <label htmlFor="username" className="form-label mb-1 text-dark">@Username</label>
-                        <input type="text" name="user" className="form-control mb-4" placeholder={name} onChange={handleName} />
+                        <input type="text" name="user" autoComplete="off" className="form-control mb-4" placeholder={name} onChange={handleName} />
                         <div className="d-flex justify-content-between mb-5">
                             <button onClick={handleVideo} className={`btn btn-${video?'dark':'danger'} btn-icon`} data-for="tool-tip" data-tip="Cam">
                                 <i className={`bi bi-camera-video${video?'':'-off'}-fill fa-2x icons`} />

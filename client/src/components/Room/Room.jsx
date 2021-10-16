@@ -35,13 +35,27 @@ const Message = ({message}) => {
         );
     }
 
+    if(message.dir === 'end'){
+        // my messages
+        return (
+            <div className="d-flex justify-content-end">
+                <div className="message text-break mb-3 p-3">
+                    <span className="my-2"> {message.message} </span>
+                    <div className="d-flex justify-content-end">
+                        <div className="fw-italic time"> {message.time} </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className={`d-flex justify-content-${message.dir}`}>
+        <div className="d-flex justify-content-start">
             <div className="message text-break mb-3 p-3">
                 <div className="fw-bold text-center"> {message.name} </div>
                 <div className="my-2"> {message.message} </div>
                 <div className="d-flex justify-content-end">
-                    <div className="fw-italic"> {message.time} </div>
+                    <div className="fw-italic time"> {message.time} </div>
                 </div>
             </div>
         </div>
@@ -282,7 +296,7 @@ const Room = (props) => {
                         </div>
                     </div>
                     <nav className="navbar p-1 chat-form">
-                        <input className="input-message" spellCheck="false" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
+                        <input className="input-message" spellCheck="false" autoComplete="off" placeholder='Type message here...' value={message} onChange={messageChange} onKeyPress={sendMessage}/>
                     </nav>
                 </div>
             </div>

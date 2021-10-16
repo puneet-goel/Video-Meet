@@ -27,8 +27,13 @@
 }
 
 .message{
-    width: 80%;
+    max-width: 80%;
+    min-width: 40%;
     border-radius: 15px;
+}
+
+.time{
+    font-size: smaller;
 }
 
 .justify-content-end .message{

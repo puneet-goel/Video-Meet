@@ -22,7 +22,11 @@ body{
     color: red;
 }
 
-.mail i{
+.email-input{
+    border: none;
+}
+
+.plane i{
     color: green;
 }
 
@@ -61,15 +65,22 @@ body{
 
 @media only screen and (min-width: 576px) {
 
-    .home{
-        height: 100vh;
+    .room-input {
+        width: 80%;
     }
 
-    .room-input {
+    .email-input{
         width: 80%;
     }
 
     .intro h6{
         width: 80%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+
+    .home{
+        height: 100vh;
     }
 }

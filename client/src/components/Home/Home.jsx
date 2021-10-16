@@ -1,12 +1,30 @@
 import React,{ useEffect, useState } from "react";
+import { Formik, ErrorMessage, Field, Form } from 'formik';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useHistory } from "react-router-dom";
 import { v1 as uuid } from "uuid";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import * as Yup from 'yup';
 
 import { addRoom, sendEmail } from "../../api.js";
 import init from "../../storageInit.js";
 import Clock from "../UI/Clock/Clock.jsx";
 import "./Home.css";
+
+const schema = Yup.object().shape({
+    name: Yup.string()
+        .min(2, 'Too Short!')
+        .max(15, 'Too Long!')
+        .required('Required'),
+    emails: Yup.array()
+        .required('Required')
+        .transform(function(value, originalValue) {
+            if (this.isType(value) && value !== null) {
+                return value;
+            }
+            return originalValue ? originalValue.split(/[\s,]+/) : [];
+        })
+        .of(Yup.string().email(({ value }) => `${value} is not a valid email`))
+});
 
 const Home = () => {
     const arr = ['V','We','Video'];
@@ -15,10 +33,6 @@ const Home = () => {
     const [room, setRoom] = useState(() => '');
     const [index,setIndex] = useState(() => 0);
     const [share,setShare] = useState(() => false);
-    const [emailDetails,setEmailDetails] = useState({
-        name: '',
-        emails: ''
-    });
 
     const history = useHistory();
 
@@ -45,36 +59,12 @@ const Home = () => {
 
     const handleChange = (event) => {
         event.preventDefault();
-        const target = event.target.name;
-        if(target === 'room'){
-            setRoom(event.target.value);
-        }else if(target === 'emails'){
-            setEmailDetails({
-                ...emailDetails,
-                emails: event.target.value
-            });
-        }else if(target === 'name'){
-            setEmailDetails({
-                ...emailDetails,
-                name: event.target.value
-            });
-        }
+        setRoom(event.target.value);
     }
 
     const handleJoin = (event) => {
         event.preventDefault();
         history.push(`/check/${room}`);
-    }
-
-    const handleEmailSent = (event) => {
-        event.preventDefault();
-        alert("Email sent successfully!!!");
-        sendEmail(room,emailDetails.emails,emailDetails.name);
-        setEmailDetails({
-            name: '',
-            emails: ''
-        });
-        setShare(false);
     }
 
     useEffect(() => {
@@ -95,20 +85,51 @@ const Home = () => {
                         <h6 className="fst-italic mt-3">V Meet is the Video Conferencing app. It’s free and simple. Invite friends for a group call.</h6>
                     </div>
                     <div className="input-group room-input pt-sm-5">
-                        <input name="room" spellCheck="false" className="form-control" placeholder="Enter Room Code" onChange={handleChange} value={room} />
+                        <input name="room" spellCheck="false" autoComplete="off" className="form-control" placeholder="Enter Room Code" onChange={handleChange} value={room} />
                         <span className="input-group-text dustbin" onClick={handleClear} > 
                             <i className="fas fa-trash" />
                         </span>
                     </div>
                     {
-                        (!share)?<div />:
-                        <div className="input-group room-input pt-3 pt-sm-5">
-                            <input name="name" spellCheck="false" className="form-control" placeholder="Your Name" onChange={handleChange} value={emailDetails.name} />
-                            <input name="emails" spellCheck="false" className="form-control" placeholder="xyz@example.com" onChange={handleChange} value={emailDetails.emails} />
-                            <span className="input-group-text mail" onClick={handleEmailSent} > 
-                                <i className="fas fa-paper-plane" />
-                            </span>
-                        </div>
+                        (share)?<Formik
+                            initialValues= {{
+                                name: '',
+                                emails: '',
+                            }}
+                            validationSchema = {schema}
+                            onSubmit= {values => {
+                                alert("Email sent successfully!!!");
+                                setShare(false);
+                                sendEmail(room, values.emails, values.name);
+                            }}
+                        >
+                            {({ errors, touched }) => (
+                                <Form >
+                                    <div className="mb-3 mt-4">
+                                        <Field id="name" name="name" type="text" spellCheck="false" autoComplete="off" placeholder="Enter Your Name" className="email-input form-control"/>
+                                        <ErrorMessage name="name" render={ msg => 
+                                            <div className="form-text text-danger">
+                                                {msg}
+                                            </div>
+                                        }/>
+                                    </div>
+
+                                    <label htmlFor="emails" className="form-label">Comma Separated Emails</label> 
+                                    <div className="input-group email-input">
+                                        <Field id="emails" name="emails" spellCheck="false" autoComplete="off" type="emails" placeholder="Emails" className="form-control" />
+                                        <button type="submit" className="input-group-text plane" > 
+                                            <i className="fas fa-paper-plane" />
+                                        </button> 
+                                    </div>
+                                    <ErrorMessage name="emails" render={ msg => 
+                                        <div className="form-text text-danger">
+                                            {msg}
+                                        </div>
+                                    }/>
+                                </Form>
+                            )}
+                        </Formik>
+                        :null
                     }
                 </div>
 
