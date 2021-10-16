@@ -21,7 +21,7 @@ const schema = Yup.object().shape({
             if (this.isType(value) && value !== null) {
                 return value;
             }
-            return originalValue ? originalValue.split(/[\s,]+/) : [];
+            return originalValue ? originalValue.split(',').map(x => x.trim()) : [];
         })
         .of(Yup.string().email(({ value }) => `${value} is not a valid email`))
 });

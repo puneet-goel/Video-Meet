@@ -19,7 +19,7 @@ app.use([
 const server = createServer(app);
 export const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:3000","https://v-meet-puneet.netlify.app"],
         methods: ['GET','POST']
     }
 });
@@ -45,7 +45,7 @@ app.post('/sendMail', async(req,res) => {
         <h1>Invitation From ${name}</h1>
         <p>You have been invited for the meeting. </p>
         <p>Meeeting Code: ${link} </p>
-        <p>Meeting Link: https://localhost:3000/${link}</p>
+        <p>Meeting Link: https://v-meet-puneet.netlify.app/${link}</p>
     `
 
     try{
