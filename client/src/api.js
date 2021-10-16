@@ -15,7 +15,6 @@ export const checkRoom = async(roomID) => {
 		}
 
 		const {data} = await axios.get(url + "/rooms");
-		console.log(data);
 		let flag = false;
 		for(const room of data){
             if(room === roomID){
