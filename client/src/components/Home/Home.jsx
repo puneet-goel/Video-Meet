@@ -145,7 +145,7 @@ const Home = () => {
                             </div>
                             
                             <div className="d-flex flex-column align-items-center">
-                                <CopyToClipboard text={room} >
+                                <CopyToClipboard text={`https://v-meet-puneet.netlify.app/${room}`} >
                                     <button className="btn btn-primary function" >
                                         <i className="fas fa-copy p-2" /> 
                                     </button>

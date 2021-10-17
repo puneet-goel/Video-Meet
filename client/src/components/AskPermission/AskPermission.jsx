@@ -16,16 +16,22 @@ const AskPermission = (props) => {
 
     const handleVideo = (event) => {
         event.preventDefault();
-        sessionStorage.setItem("video",!video);
         setVideo((cur) => !cur);
-        myVideo.current.srcObject.getTracks()[1].enabled = !video;
+        if(myVideo.current.srcObject){
+            if(myVideo.current.srcObject.getVideoTracks().length > 0){
+                myVideo.current.srcObject.getVideoTracks()[0].enabled = !video;
+            }        
+        }
     };
 
     const handleAudio = (event) => {
         event.preventDefault();
-        sessionStorage.setItem("audio",!audio);
         setAudio((cur) => !cur);
-        myVideo.current.srcObject.getTracks()[0].enabled = !audio;
+        if(myVideo.current.srcObject){
+            if(myVideo.current.srcObject.getAudioTracks().length > 0){
+                myVideo.current.srcObject.getAudioTracks()[0].enabled = !audio;
+            }        
+        }
     };
 
     const handleJoin = (event) => {
@@ -33,6 +39,8 @@ const AskPermission = (props) => {
         
         let x = (name === '')?coolName():name;        
         sessionStorage.setItem("name",x);
+        sessionStorage.setItem("video",video);
+        sessionStorage.setItem("audio",audio);
         addParticipant(0,x);
         setAsk(true);
     };
@@ -43,11 +51,11 @@ const AskPermission = (props) => {
     }
 
     useEffect(() => {
-
+        sessionStorage.setItem("participants",'[]');
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then((currentStream) => {
             myVideo.current.srcObject = currentStream;
-        }).catch((err) => {
+        }).catch(err => {
             console.error(err);
         });
         
@@ -81,7 +89,7 @@ const AskPermission = (props) => {
                                 <i className={`fa fa-microphone${audio?'':'-slash'} fa-2x icons`} />
                             </button>
                             <button onClick={handleJoin} className="btn btn-danger btn-icon" data-for="tool-tip" data-tip="Join">
-                                <i className="fa fa-handshake-o fa-2x icons" />
+                                <i className="fas fa-sign-in-alt fa-2x" />
                             </button>
                         </div>
                     </div>

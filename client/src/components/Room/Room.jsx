@@ -82,16 +82,22 @@ const Room = (props) => {
 
     const handleVideo = (event) => {
         event.preventDefault();
-        sessionStorage.setItem("video",!video);
         setVideo((cur) => !cur);
-        myVideo.current.srcObject.getTracks()[1].enabled = !video;
+        if(myVideo.current.srcObject){
+            if(myVideo.current.srcObject.getVideoTracks().length > 0){
+                myVideo.current.srcObject.getVideoTracks()[0].enabled = !video;
+            }        
+        }
     };
 
     const handleAudio = (event) => {
         event.preventDefault();
-        sessionStorage.setItem("audio",!audio);
         setAudio((cur) => !cur);
-        myVideo.current.srcObject.getTracks()[0].enabled = !audio;
+        if(myVideo.current.srcObject){
+            if(myVideo.current.srcObject.getAudioTracks().length > 0){
+                myVideo.current.srcObject.getAudioTracks()[0].enabled = !audio;
+            }        
+        }
     };
 
     const handleLeave = (event) => {
@@ -140,6 +146,7 @@ const Room = (props) => {
     
         const addPeer = (incomingSignal, sender, stream) => {
             const peer = new Peer({
+                initiator: false,
                 trickle: false,
                 stream,
             });
@@ -155,8 +162,14 @@ const Room = (props) => {
             myVideo.current.srcObject = stream; 
             
             //syncing video and audio with landing page(AskPermission)
-            myVideo.current.srcObject.getTracks()[0].enabled = sessionStorage.getItem('audio') === 'true';
-            myVideo.current.srcObject.getTracks()[1].enabled = sessionStorage.getItem('video') === 'true';
+            if(myVideo.current.srcObject){
+                if(myVideo.current.srcObject.getVideoTracks().length > 0){
+                    myVideo.current.srcObject.getVideoTracks()[0].enabled = sessionStorage.getItem('video') === 'true';
+                }        
+                if(myVideo.current.srcObject.getAudioTracks().length > 0){
+                    myVideo.current.srcObject.getAudioTracks()[0].enabled = sessionStorage.getItem('audio') === 'true';
+                } 
+            }
             
             socket.current.emit("join room", roomID, myName.current);
 
@@ -246,6 +259,15 @@ const Room = (props) => {
         }).catch(err => {
             console.log(err);
         });
+
+        //socket instance deleted, when user clicks back button in history
+        const remove = () => {
+            socket.current.emit('forceDisconnect');
+        }
+        window.addEventListener('popstate', remove);
+        return () => {
+            window.removeEventListener('popstate', remove);
+        }
     }, [history, roomID]);
 
     return (

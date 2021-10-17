@@ -12,6 +12,8 @@
 
 .video-element{
     height: 130px;
+    width: 300px;
+    object-fit: cover;
     border: 2px solid #5ba52a8a;
 }
 
