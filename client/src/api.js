@@ -39,7 +39,7 @@ export const checkRoom = async (roomID) => {
 
 export const sendEmail = async (link, users, name) => {
   try {
-    const data = await axios.post(url + '/sendMail', {
+    const { data } = await axios.post(url + '/sendMail', {
       link: link,
       users: users,
       name: name,
