@@ -1,14 +1,16 @@
-body, html, #root {
-    padding: 0;
-    margin: 0;
+body,
+html,
+#root {
+  padding: 0;
+  margin: 0;
 }
 
 *::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-  
+
 /* Hide scrollbar for IE, Edge and Firefox */
-*{
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

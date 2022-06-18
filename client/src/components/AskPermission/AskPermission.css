@@ -42,7 +42,7 @@
   margin: -1px;
 }
 
-.myVideo{
+.myVideo {
   padding: 0;
   object-fit: cover;
   height: 100%;
@@ -61,12 +61,12 @@
     border-top-width: 35px;
     border-bottom-width: 35px;
   }
-  
-  .tablet:before{
+
+  .tablet:before {
     top: -20px;
   }
 
-  .tablet:after{
+  .tablet:after {
     width: 20px;
     height: 20px;
     bottom: -40px;
@@ -75,29 +75,29 @@
   .content {
     height: 282px;
   }
-  
+
   .btn-icon {
     width: 50px;
     height: 50px;
   }
 
-  .icons{
+  .icons {
     font-size: 1.5em;
   }
 }
 
 @media only screen and (min-width: 992px) {
-  .permission{
-    height:100vh;
+  .permission {
+    height: 100vh;
   }
 }
 
 @media only screen and (min-width: 2560px) {
-  .tablet{
+  .tablet {
     height: 600px;
   }
 
-  .content{
+  .content {
     height: 480px;
   }
 }

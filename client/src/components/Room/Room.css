@@ -1,81 +1,81 @@
-.room-videos{
-    background: black;
+.room-videos {
+  background: black;
 }
 
 .video-grid {
-    height: calc(100vh - 90px);  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+  height: calc(100vh - 90px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.video-element{
-    height: 130px;
-    width: 300px;
-    object-fit: cover;
-    border: 2px solid #5ba52a8a;
+.video-element {
+  height: 130px;
+  width: 300px;
+  object-fit: cover;
+  border: 2px solid #5ba52a8a;
 }
 
-.video-element:hover{
-    border: 3px solid #5ba52a8a;;
+.video-element:hover {
+  border: 3px solid #5ba52a8a;
 }
 
-.controls{
-    background: #282828a6;
-    height: 90px;
+.controls {
+  background: #282828a6;
+  height: 90px;
 }
 
-.control-block{
-    cursor: pointer;
+.control-block {
+  cursor: pointer;
 }
 
-.control-button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.control-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.control-button i{
-    font-size: 25px;
+.control-button i {
+  font-size: 25px;
 }
 
 @media only screen and (min-width: 768px) {
-    .video-element{
-        height: 190px;
-    }
+  .video-element {
+    height: 190px;
+  }
 
-    .control-button{
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+  .control-button {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-    .control-button i{
-        font-size: 30px;
-    }
+  .control-button i {
+    font-size: 30px;
+  }
 }
 
 @media only screen and (min-width: 1024px) {
-    .video-element{
-        height: 250px;
-    }
+  .video-element {
+    height: 250px;
+  }
 
-    .control-button{
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-    
-    .control-button i{
-        font-size: 35px;
-    }
+  .control-button {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .control-button i {
+    font-size: 35px;
+  }
 }
 
 @media only screen and (min-width: 1440px) {
-    .video-grid {
-        height: calc(100vh - 100px);  
-    }
+  .video-grid {
+    height: calc(100vh - 100px);
+  }
 
-    .controls{
-        height: 100px;
-    }
+  .controls {
+    height: 100px;
+  }
 }

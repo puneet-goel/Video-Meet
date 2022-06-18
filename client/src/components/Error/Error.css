@@ -6,16 +6,16 @@
   transform: translate(-50%, -50%);
   max-width: 520px;
   line-height: 1.4;
-  font-family: 'Montserrat', sans-serif; 
+  font-family: 'Montserrat', sans-serif;
 }
 
-.four{
+.four {
   font-size: 146px;
   font-weight: 700;
   color: #232323;
 }
 
-.cry{
+.cry {
   width: 120px;
   height: 120px;
   background-image: url('../../images/emoji.png');
@@ -25,7 +25,7 @@
   transform: scale(1.4);
 }
 
-.oops{
+.oops {
   font-size: 22px;
   font-weight: 700;
   text-transform: uppercase;
@@ -36,7 +36,7 @@
   color: #787878;
 }
 
-#home{
+#home {
   font-weight: 700;
   background-color: #f99827;
   color: #fff;

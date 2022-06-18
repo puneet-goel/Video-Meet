@@ -1,86 +1,87 @@
-body{
-    background: #cdcdc8;
+body {
+  background: #cdcdc8;
 }
 
-.intro h4{
-    color: #727270;
+.intro h4 {
+  color: #727270;
 }
 
-.intro h6{
-    color: #727270;
+.intro h6 {
+  color: #727270;
 }
 
-.room-input input:focus{
-    outline: none;
+.room-input input:focus {
+  outline: none;
 }
 
-.dustbin, .mail{
-    cursor: pointer;
+.dustbin,
+.mail {
+  cursor: pointer;
 }
 
-.dustbin i{
-    color: red;
+.dustbin i {
+  color: red;
 }
 
-.email-input{
-    border: none;
+.email-input {
+  border: none;
 }
 
-.plane i{
-    color: green;
+.plane i {
+  color: green;
 }
 
-.right-function{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+.right-function {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.block1, .block2{
-    display: flex;
-    justify-content: space-evenly;
+.block1,
+.block2 {
+  display: flex;
+  justify-content: space-evenly;
 }
 
-.block1 h6{
-    color: #727270;
+.block1 h6 {
+  color: #727270;
 }
 
-.block2 h6{
-    color: #727270;
+.block2 h6 {
+  color: #727270;
 }
 
-.function{
-    font-size: 2.5em;
-    border-radius: 15px;
+.function {
+  font-size: 2.5em;
+  border-radius: 15px;
 }
 
-.function:hover{
-    color: white;
+.function:hover {
+  color: white;
 }
 
-.func-video, .func-share{
-    background: #ff742f;
-    color: white;
+.func-video,
+.func-share {
+  background: #ff742f;
+  color: white;
 }
 
 @media only screen and (min-width: 576px) {
+  .room-input {
+    width: 80%;
+  }
 
-    .room-input {
-        width: 80%;
-    }
+  .email-input {
+    width: 80%;
+  }
 
-    .email-input{
-        width: 80%;
-    }
-
-    .intro h6{
-        width: 80%;
-    }
+  .intro h6 {
+    width: 80%;
+  }
 }
 
 @media only screen and (min-width: 992px) {
-
-    .home{
-        height: 100vh;
-    }
+  .home {
+    height: 100vh;
+  }
 }
