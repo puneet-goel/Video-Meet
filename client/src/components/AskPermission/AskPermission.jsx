@@ -11,7 +11,7 @@ const AskPermission = (props) => {
   const [video, setVideo] = useState(true);
   const [audio, setAudio] = useState(true);
 
-  const myVideo = useRef(null);
+  const myVideo = useRef();
 
   const handleVideo = (event) => {
     event.preventDefault();

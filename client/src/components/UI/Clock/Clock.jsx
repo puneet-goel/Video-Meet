@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
-import './clock.css';
+import './clock.css'
 
 const Clock = () => {
   const months = [
@@ -15,8 +15,8 @@ const Clock = () => {
     'September',
     'October',
     'November',
-    'December',
-  ];
+    'December'
+  ]
   const days = [
     'Sunday',
     'Monday',
@@ -24,31 +24,31 @@ const Clock = () => {
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday',
-  ];
-  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    'Saturday'
+  ]
+  const options = { hour: 'numeric', minute: 'numeric', hour12: true }
 
-  const [clock, setClock] = useState(() => new Date());
+  const [clock, setClock] = useState(() => new Date())
 
   const refreshClock = () => {
-    setClock(new Date());
-  };
+    setClock(new Date())
+  }
 
   useEffect(() => {
-    const timerId = setInterval(refreshClock, 1000);
+    const timerId = setInterval(refreshClock, 1000)
     return function cleanup() {
-      clearInterval(timerId);
-    };
-  }, []);
+      clearInterval(timerId)
+    }
+  }, [])
 
   return (
-    <div className="text-center date mt-5">
-      <h1 className="fw-bold">{clock.toLocaleString('en-US', options)}</h1>
-      <p className="fst-italic">{`${days[clock.getDay()]}, ${
+    <div className='text-center date mt-5'>
+      <h1 className='fw-bold'>{clock.toLocaleString('en-US', options)}</h1>
+      <p className='fst-italic'>{`${days[clock.getDay()]}, ${
         months[clock.getMonth()]
       } ${clock.getDate()}`}</p>
     </div>
-  );
-};
+  )
+}
 
-export default Clock;
+export default Clock
