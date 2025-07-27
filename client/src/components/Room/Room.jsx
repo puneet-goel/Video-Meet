@@ -107,10 +107,7 @@ const Room = (props) => {
   }
 
   const sendMessage = (event) => {
-    event.preventDefault()
-
     if (event.key !== 'Enter') {
-      setMessage(message + event.key)
       return
     }
 
@@ -125,6 +122,11 @@ const Room = (props) => {
       roomID: roomID
     })
     setMessage('')
+  }
+
+  const onChangeMessage = (event) => {
+    event.preventDefault()
+    setMessage(event.target.value)
   }
 
   const createPeer = (receiver, senderName, sender, stream) => {
@@ -366,6 +368,7 @@ const Room = (props) => {
               autoComplete='off'
               placeholder='Type message here...'
               value={message}
+              onChange={onChangeMessage}
               onKeyDown={sendMessage}
             />
           </nav>
